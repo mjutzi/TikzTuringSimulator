@@ -19,7 +19,7 @@ def left_of_unexpandable(index, list):
 def right_of_expandable(index, list):
     new_index = index + 1
     while new_index >= len(list):
-        list.add(None)
+        list.append(None)
         new_index -= 1
     return new_index
 

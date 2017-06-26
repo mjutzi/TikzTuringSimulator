@@ -1,6 +1,6 @@
 from enum import Enum
 
-from core.internals import EXPAND_ALL
+from core.band_expansion import EXPAND_ALL
 
 
 class BandDirection(Enum):
