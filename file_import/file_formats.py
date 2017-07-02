@@ -31,8 +31,7 @@ CUSTOM_HEADER_PATTERN = re.compile('\s*num_of_bands=\'(?P<num_of_bands>\d+)\'\s+
 
 # current_state: [read_chars] > new_state: [new_chars] [head_directions]
 CUSTOM_COMMAND_PATTERN = re.compile('\s*(?P<current_state>[^:]+):'
-                                    '\s\[(?P<read_chars>[^\]]+)\]'
-                                    '\s*>\s*'
-                                    '(?P<new_state>[^:]+):'
+                                    '\s\[(?P<read_chars>[^\]]+)\]\s*>'
+                                    '\s*(?P<new_state>[^:]+):'
                                     '\s\[(?P<new_chars>[^\]]+)\]'
                                     '\s*\[(?P<head_directions>[^\]]+)\]')
