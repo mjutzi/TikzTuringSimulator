@@ -1,30 +1,30 @@
 import collections
 
 
-def left_of_expandable(index, list):
+def left_of_expandable(index, list, placeholder=None):
     new_index = index - 1
     while new_index < 0:
-        list.insert(0, None)
+        list.insert(0, placeholder)
         new_index += 1
     return new_index
 
 
-def left_of_unexpandable(index, list):
+def left_of_unexpandable(index, list, placeholder=None):
     new_index = index - 1
     if new_index < 0:
         raise ValueError('Index out of left range.')
     return new_index
 
 
-def right_of_expandable(index, list):
+def right_of_expandable(index, list, placeholder=None):
     new_index = index + 1
     while new_index >= len(list):
-        list.append(None)
+        list.append(placeholder)
         new_index -= 1
     return new_index
 
 
-def right_of_unexpandable(index, list):
+def right_of_unexpandable(index, list, placeholder=None):
     new_index = index + 1
     if new_index >= len(list):
         raise ValueError('Index out of right range.')

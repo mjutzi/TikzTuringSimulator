@@ -1,5 +1,6 @@
 import os
 
+from core.band import BandAlphabet
 from file_import.file_elements import Header, Command, compile_turing_machine
 from file_import.file_formats import DEFAULT_COMMAND_PATTERN, DEFAULT_HEADER_PATTERN, DEFAULT_IGNORE_LINE
 from file_import.file_formats import CUSTOM_COMMAND_PATTERN, CUSTOM_HEADER_PATTERN, CUSTOM_IGNORE_LINE
@@ -57,7 +58,6 @@ def _parse_command(str, num_of_bands, pattern):
 
 
 def _get_format_by_name(parse_format):
-
     if not parse_format or parse_format == 'default':
         return DEFAULT_IGNORE_LINE, DEFAULT_HEADER_PATTERN, DEFAULT_COMMAND_PATTERN
 
@@ -76,7 +76,10 @@ def parse_lines(all_lines, parse_format='default'):
     header = _parse_header(lines[0], header_pattern)
     commands = [_parse_command(line, header.num_of_bands, command_pattern) for line in lines[1:]]
 
-    return compile_turing_machine(header, commands)
+    band_alphabet = BandAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
+    turing_machine = compile_turing_machine(header, commands)
+
+    return band_alphabet, turing_machine
 
 
 def parse_file(path):
