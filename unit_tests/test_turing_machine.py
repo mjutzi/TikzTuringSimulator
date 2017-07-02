@@ -43,5 +43,15 @@ class TestTuringMachine(TestCase):
         expected_band1 = ['2', '0', '-']
         expected_band2 = ['-', '1', '1']
 
-        self.assertEqual(band1_chars, expected_band1, 'check final chars of first band')
-        self.assertEqual(band2_chars, expected_band2, 'check final chars of second band')
+        self.assertEqual(expected_band1, band1_chars, 'check final chars of first band')
+        self.assertEqual(expected_band2, band2_chars, 'check final chars of second band')
+
+    def test_turing_machine_changes_state_accurately(self):
+        band1_chars = ['1', '2', '2']
+        band2_chars = ['2', '3', '1']
+        multi_band = MultiBand([Band(band1_chars), Band(band2_chars)])
+
+        changed_states = [target.new_state for _, target in self.under_test.as_iterator(multi_band)]
+        expected_states = [self.state_2, self.state_2, self.state_3]
+
+        self.assertEqual(expected_states, changed_states, 'check if transition of states is accurate')
