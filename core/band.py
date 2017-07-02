@@ -41,7 +41,7 @@ class Band:
         if band_direction is BandDirection.RIGHT:
             return self.__expansion_strategy.move_right_op
 
-        return lambda position, list: position
+        return lambda position, list, empty_char: position
 
     def __get_empty_char(self):
         return self.__alphabet.empty_char if self.__alphabet else None

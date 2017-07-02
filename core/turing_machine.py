@@ -37,4 +37,8 @@ class TuringMachine:
                 raise InvalidStateException(event)
 
             band.write(target.new_chars)
+            band.move(target.move_directions)
+
+            current_state = target.new_state
+
             yield event, target
