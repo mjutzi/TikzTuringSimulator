@@ -4,7 +4,7 @@ State = collections.namedtuple('State', 'index name')
 
 TransitionEvent = collections.namedtuple('TransitionEvent', 'current_state read_chars')
 
-TransitionTarget = collections.namedtuple('TransitionTarget', 'new_state new_chars move_direction')
+TransitionTarget = collections.namedtuple('TransitionTarget', 'new_state new_chars move_directions')
 
 
 class TransitionGraph:
