@@ -1,6 +1,10 @@
 from enum import Enum
 
-from core.internals import EXPAND_ALL
+import collections
+
+from core.band_expansion import EXPAND_ALL
+
+BandAlphabet = collections.namedtuple('BandAlphabet', 'chars empty_char')
 
 
 class BandDirection(Enum):
@@ -17,7 +21,7 @@ class Band:
     Beschreibt ein eindimensionales Turingband
     '''
 
-    def __init__(self, entries, expansion_strategy=EXPAND_ALL):
+    def __init__(self, entries, alphabet=None, expansion_strategy=EXPAND_ALL):
         '''
         Erzeugt ein neues eindimensionales Turingband. Werden die Grenzen des Turingbandes erreicht, so entscheidet die expansion_strategy
         als Stretegy pattern, ob und wie das Band erweitert wird.
@@ -27,6 +31,7 @@ class Band:
         '''
         self.__position = 0
         self.__entries = entries
+        self.__alphabet = alphabet
         self.__expansion_strategy = expansion_strategy
 
     def __get_expansion_op_by_direction(self, band_direction):
@@ -36,14 +41,17 @@ class Band:
         if band_direction is BandDirection.RIGHT:
             return self.__expansion_strategy.move_right_op
 
-        return lambda position, list: position
+        return lambda position, list, empty_char: position
+
+    def __get_empty_char(self):
+        return self.__alphabet.empty_char if self.__alphabet else None
 
     def move(self, band_direction):
         '''
         Bewegt das Band in die angegebene Richtung.
         '''
         expansion_op = self.__get_expansion_op_by_direction(band_direction)
-        self.__position = expansion_op(self.__position, self.__entries)
+        self.__position = expansion_op(self.__position, self.__entries, self.__get_empty_char())
 
     def read(self):
         '''
@@ -56,6 +64,24 @@ class Band:
         Schreibt den Buchstaben an der aktuellen Position auf das Band.
         '''
         self.__entries[self.__position] = char
+
+    def set_alphabet(self, alphabet):
+        '''
+        Setzt das Bandalphabet
+        '''
+        self.__alphabet = alphabet
+
+    def poistion(self):
+        return self.__position;
+
+    def non_alphabet_chars(self):
+        '''
+        Gibt alle buchstaben des Bandes zurück, die nicht Teil des alphabets sind.
+        '''
+        if self.__alphabet:
+            return set(self.__alphabet.chars) - set(self.__entries)
+        else:
+            return set(self.__entries)
 
 
 class MultiBand:
@@ -89,3 +115,16 @@ class MultiBand:
         '''
         for char, band in zip(chars, self.__bands):
             band.write(char)
+
+    def set_alphabet(self, alphabet):
+        '''
+        Setzt das Bandalphabet
+        '''
+        for band in self.__bands:
+            band.set_alphabet(alphabet)
+
+    def non_alphabet_chars(self):
+        '''
+        Gibt alle buchstaben des Bandes zurück, die nicht Teil des alphabets sind.
+        '''
+        return set().union(band.non_alphabet_chars() for band in self.__bands)
