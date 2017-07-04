@@ -1,5 +1,5 @@
 from unittest import TestCase
-from core.band_expansion import left_of_expandable, right_of_expandable
+from core.tape_expansion import left_of_expandable, right_of_expandable
 
 
 class TestBandExpansion(TestCase):

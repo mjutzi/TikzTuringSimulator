@@ -1,6 +1,6 @@
 import os
 
-from core.band import BandAlphabet
+from core.tape import BandAlphabet
 from file_import.file_elements import Header, Command, compile_turing_machine
 from file_import.file_formats import DEFAULT_COMMAND_PATTERN, DEFAULT_HEADER_PATTERN, DEFAULT_IGNORE_LINE
 from file_import.file_formats import CUSTOM_COMMAND_PATTERN, CUSTOM_HEADER_PATTERN, CUSTOM_IGNORE_LINE

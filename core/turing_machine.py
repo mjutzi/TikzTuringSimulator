@@ -15,29 +15,29 @@ class TuringMachine:
         self.transition_graph = transition_graph
         self.alphabet = alphabet
 
-    def assert_alphabetic_band_chars(self, band):
+    def assert_has_only_alphabet_chars(self, tape):
         '''
         Prüft ob das Band nur character aus dem gesetzten Alphabet hat.
         '''
-        band.set_alphabet(self.alphabet)
-        non_alphabet_chars = band.non_alphabet_chars()
+        tape.set_alphabet(self.alphabet)
+        non_alphabet_chars = tape.non_alphabet_chars()
 
         if len(non_alphabet_chars) > 0:
             raise InvalidCharacterException(non_alphabet_chars)
 
-    def as_iterator(self, band):
+    def as_iterator(self, tape):
 
         current_state = self.initial_state
 
         while not current_state in self.final_states:
 
-            event, target = self.transition_graph.get_transition(current_state, band.read())
+            event, target = self.transition_graph.get_transition(current_state, tape.read())
 
             if not target:
                 raise InvalidStateException(event)
 
-            band.write(target.new_chars)
-            band.move(target.move_directions)
+            tape.write(target.new_chars)
+            tape.move(target.move_directions)
 
             current_state = target.new_state
 

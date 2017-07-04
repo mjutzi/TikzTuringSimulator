@@ -2,12 +2,12 @@ from enum import Enum
 
 import collections
 
-from core.band_expansion import EXPAND_ALL
+from core.tape_expansion import EXPAND_ALL
 
 BandAlphabet = collections.namedtuple('BandAlphabet', 'chars empty_char')
 
 
-class BandDirection(Enum):
+class Direction(Enum):
     '''
     Beschreibt die Laufrichtung eines Turingbandes nachdem der Zustand geandert wurde
     '''
@@ -16,7 +16,7 @@ class BandDirection(Enum):
     RIGHT = 1
 
 
-class Band:
+class Tape:
     '''
     Beschreibt ein eindimensionales Turingband
     '''
@@ -35,10 +35,10 @@ class Band:
         self.__expansion_strategy = expansion_strategy
 
     def __get_expansion_op_by_direction(self, band_direction):
-        if band_direction is BandDirection.LEFT:
+        if band_direction is Direction.LEFT:
             return self.__expansion_strategy.move_left_op
 
-        if band_direction is BandDirection.RIGHT:
+        if band_direction is Direction.RIGHT:
             return self.__expansion_strategy.move_right_op
 
         return lambda position, list, empty_char: position
@@ -84,7 +84,7 @@ class Band:
             return set(self.__entries)
 
 
-class MultiBand:
+class MultiTape:
     '''
     Beschreibt ein mehrdimensionales Turingband als Kollektion eindimensionaler Turingbänder.
     '''
