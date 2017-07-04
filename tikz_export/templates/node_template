@@ -1,1 +1,0 @@
-\node [on chain=1,tm_node, {IS_HIGHLIGHTED}] {SPECIFIER} {{CONTENT}};

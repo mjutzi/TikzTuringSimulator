@@ -1,0 +1,8 @@
+
+\begin{{scope}}[shift={{(0,-{OFFSET}cm)}}, start chain={BAND_ID} going right,node distance=0.5mm]
+    \node [on chain=1,tm_node, tm_left] {{}};
+    \node [on chain=1,tm_node] {{}};
+    {NODES}
+    \node [on chain=1,tm_node] {{}};
+    \node [on chain=1,tm_node, tm_right] {{}};
+\end{{scope}}
