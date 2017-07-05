@@ -7,12 +7,13 @@ from file_import.file_formats import CUSTOM_COMMAND_PATTERN, CUSTOM_HEADER_PATTE
 from file_import.exceptions import assert_format, FormatException
 
 
-def _value(group_name, match):
-    return match.group(group_name).strip()
+def _value(group_name, match, type=None):
+    result = match.group(group_name).strip()
+    return type(result) if type else result
 
 
-def _optional(group_name, match):
-    return match.group(group_name).strip() if group_name in match.groups() else None
+def _optional(group_name, match, type=None):
+    return _value(group_name, match, type) if group_name in match.groups() else None
 
 
 def _sequence(group_name, match, sequence_length=None):
@@ -34,8 +35,8 @@ def _parse_header(str, pattern):
     assert_format(match, 'does not match header pattern', str)
 
     return Header(
-        num_of_bands=_value('num_of_bands', match),
-        num_of_states=_optional('num_of_states', match),
+        num_of_bands=_value('num_of_bands', match, int),
+        num_of_states=_optional('num_of_states', match, int),
         chars_in=_sequence('chars_in', match),
         chars_out=_sequence('chars_out', match),
         empty_char=_value('empty_char', match),
@@ -70,16 +71,16 @@ def _get_format_by_name(parse_format):
 def parse_lines(all_lines, parse_format='default'):
     ignore_pattern, header_pattern, command_pattern = _get_format_by_name(parse_format)
 
-    lines = [line for line in all_lines if not ignore_pattern.match(line)]
+    lines = [line for line in all_lines if ignore_pattern.match(line)]
     assert_format(len(lines) > 1, 'not enough lines', None)
 
     header = _parse_header(lines[0], header_pattern)
     commands = [_parse_command(line, header.num_of_bands, command_pattern) for line in lines[1:]]
 
     band_alphabet = BandAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
-    turing_machine = compile_turing_machine(header, commands)
+    turing_machine = compile_turing_machine(header, commands, band_alphabet)
 
-    return band_alphabet, turing_machine
+    return turing_machine
 
 
 def parse_file(path):

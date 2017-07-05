@@ -10,8 +10,8 @@ Command = collections.namedtuple('Command', 'current_state read_chars new_state 
 
 
 def _compile_states(commands):
-    states1 = set(command.state_old for command in commands)
-    states2 = set(command.state_new for command in commands)
+    states1 = set(command.current_state for command in commands)
+    states2 = set(command.new_state for command in commands)
 
     states = list(states1 | states2)
     sorted(states)
@@ -26,24 +26,24 @@ def _compile_transition_graph(states, commands):
     transition_graph = TransitionGraph()
 
     for command in commands:
-        state_old = states[command.state_old]
-        read_chars = command.chars_read
+        current_state = states[command.current_state]
+        read_chars = command.read_chars
 
         target = TransitionTarget(
-            new_state=states[command.state_new],
-            new_chars=command.chars_write,
-            move_directions=command.head_directions)
+            new_state=states[command.current_state],
+            new_chars=command.new_chars,
+            move_directions=command.move_directions)
 
-        transition_graph.register_transition(state_old, read_chars, target)
+        transition_graph.register_transition(current_state, read_chars, target)
 
     return transition_graph
 
 
-def compile_turing_machine(header, commands):
+def compile_turing_machine(header, commands, band_alphabet):
     first_state, state_dict = _compile_states(commands)
     transition_graph = _compile_transition_graph(state_dict, commands)
 
     initial_state = header.initial_state if header.initial_state else first_state
     final_states = header.accepted_states
 
-    return TuringMachine(initial_state, final_states, transition_graph)
+    return TuringMachine(initial_state, final_states, transition_graph, band_alphabet)

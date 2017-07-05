@@ -83,6 +83,8 @@ class Tape:
         else:
             return set(self.__entries)
 
+    def as_list(self):
+        return self.__position, self.__entries
 
 class MultiTape:
     '''

@@ -18,7 +18,7 @@ class TemplateElement:
         with open(self.__get_template_path(), 'r') as file:
             return file.read().replace('\n', '')
 
-    def __escape_braces(self, str):
+    def __esis_emptycape_braces(self, str):
         return str.replace('{', '{{').replace('}', '}}')
 
     @memoize
@@ -43,6 +43,9 @@ class TemplateElement:
 
         return format_str, variables
 
+    def is_empty(self):
+        return not os.path.exists(self.__get_template_path())
+
     def format_map(self, map):
         format_str, variables = self.__get_fromat_string()
 
@@ -59,12 +62,21 @@ class TemplateElement:
         obj_attributes = {attr: getattr(obj, attr) for attr in dir(obj)}
         return self.format_map(obj_attributes)
 
+class TemplateEngine:
+    pass
+
+
+def fromat_tape(index, tape):
+    index, entries = tape.as_list()
+
+
+
 NodeElement = collections.namedtuple('NodeElement', 'tape_index highlited specifier value')
 node = NodeElement(tape_index=1, highlited='highlited', specifier='foo', value=5)
 
 print(node._asdict())
 
 node_element = TemplateElement('node')
-#str = node_element.format(tape_index=0, highlited='highlited', specifier='', value='1')
+# str = node_element.format(tape_index=0, highlited='highlited', specifier='', value='1')
 str = node_element.inject_values(node)
 print(str)
