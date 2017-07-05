@@ -2,7 +2,7 @@ import collections
 import os
 import re
 
-from tikz_export.caching import memoize
+from tikz_export.caching import memorize
 
 TEMPLATE_DIR = '../tikz_templates'
 
@@ -21,7 +21,7 @@ class TemplateElement:
     def __escape_braces(self, str):
         return str.replace('{', '{{').replace('}', '}}')
 
-    @memoize
+    @memorize
     def __get_variable_pattern(self):
         return re.compile('<{}\.(?P<var_name>\w+)>'.format(self.name))
 
@@ -33,7 +33,7 @@ class TemplateElement:
         pattern = self.__get_variable_pattern()
         return pattern.sub(r'{\g<var_name>}', str)
 
-    @memoize
+    @memorize
     def __get_fromat_string(self):
         template = self.__load_template()
         format_str = self.__escape_braces(template)
