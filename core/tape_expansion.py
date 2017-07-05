@@ -20,7 +20,6 @@ def right_of_expandable(index, list, placeholder=None):
     new_index = index + 1
     while new_index >= len(list):
         list.append(placeholder)
-        new_index -= 1
     return new_index
 
 
