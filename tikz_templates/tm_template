@@ -1,9 +1,0 @@
-<turing_machine.tape_strings>
-
-\begin{scope}
-\node [tm_arrow_top,yshift=.7cm] at (current_first.north) (head_top) {\small \textbf{<turing_machine.current_iteration>}};
-\end{scope}
-
-\begin{scope}
-\node [tm_arrow_bottom, yshift=-.7cm] at (current_last.south) (head_bottom) {};
-\end{scope}

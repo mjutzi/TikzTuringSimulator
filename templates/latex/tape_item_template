@@ -1,0 +1,1 @@
+\node [on chain=<tape_item.tape_index>,tm_node, <tape_item.specifier> ] <tape_item.specifier> {<tape_item.value>};

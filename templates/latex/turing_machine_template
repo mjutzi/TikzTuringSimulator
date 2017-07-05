@@ -1,0 +1,7 @@
+<turing_machine.tapes>
+
+<turing_machine.states>
+
+\begin{scope}
+\node [tm_arrow_bottom, yshift=-.7cm] at (current_last.south) (head_bottom) {};
+\end{scope}
