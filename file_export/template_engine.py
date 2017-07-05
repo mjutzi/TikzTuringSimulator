@@ -1,8 +1,7 @@
 import collections
 import os
-import re
 
-from file_export.caching import memorize
+from file_export.formatting import TemplateItemFormatter
 
 TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value specifier')
 
@@ -14,69 +13,67 @@ TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVa
 
 IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
 
-DocumentTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
+DocumentTemplateVariables = collections.namedtuple('DocumentTemplateVariables', 'iterations iteration_count')
 
-class TemplateItemFormatter:
-    def __init__(self, template_path, name):
-        self.template_path = template_path
-        self.name = name
 
-    def __get_template_path(self):
-        return os.path.join(self.template_path, '{}_template'.format(self.name))
+class __TemplateEngine:
+    DELIMITER = '\n'
 
-    def __load_template(self):
-        with open(self.__get_template_path(), 'r') as file:
-            return file.read().replace('\n', '')
+    def __init__(self,
+                 tape_item_format,
+                 tape_format,
+                 state_format,
+                 turing_machine_format,
+                 iteration_format,
+                 document_format):
+        self.tape_item_format = tape_item_format
+        self.tape_format = tape_format
+        self.state_format = state_format
+        self.turing_machine_format = turing_machine_format
+        self.iteration_format = iteration_format
+        self.document_format = document_format
 
-    def __escape_braces(self, str):
-        return str.replace('{', '{{').replace('}', '}}')
+    def __format_each(self, elements, format_fn):
+        return self.DELIMITER.join(format_fn(element) for element in elements)
 
-    @memorize
-    def __get_variable_pattern(self):
-        return re.compile('<{}\.(?P<var_name>\w+)>'.format(self.name))
+    def __compile_item(self, variables):
+        return self.tape_item_format.inject_values(variables)
 
-    def __get_template_variables(self, str):
-        pattern = self.__get_variable_pattern()
-        return {match.group('var_name') for match in pattern.finditer(str)}
+    def __compile_tape(self, variables):
+        items_string = self.__format_each(variables.items, self.__compile_item)
+        return self.tape_format.format(index=variables.index, items=items_string)
 
-    def __adapt_template_variables(self, str):
-        pattern = self.__get_variable_pattern()
-        return pattern.sub(r'{\g<var_name>}', str)
+    def __compile_state(self, variables):
+        return self.state_format.inject_values(variables)
 
-    @memorize
-    def __get_fromat_string(self):
-        template = self.__load_template()
-        format_str = self.__escape_braces(template)
+    def __compile_turing_machine(self, variables):
+        states_str = self.__format_each(variables.iterations, self.__compile_state)
+        tapes_str = self.__format_each(variables.tapes, self.__compile_tape)
+        return self.turing_machine_format.format(states=states_str, tapes=tapes_str)
 
-        variables = self.__get_template_variables(format_str)
-        format_str = self.__adapt_template_variables(format_str)
+    def __compile_iteration(self, variables):
+        turing_machine_string = self.__compile_turing_machine(variables.turing_machine)
+        return self.iteration_format.format(iteration_count=variables.iteration_count,
+                                            turing_machine=turing_machine_string)
 
-        return format_str, variables
+    def compile_document(self, variables):
+        iterations_string = self.__format_each(variables.states, self.__compile_iteration)
+        return self.document_format.format(iteration_count=variables.iteration_count, iterations=iterations_string)
 
-    def is_empty(self):
-        return not os.path.exists(self.__get_template_path())
+    def create_document(self, variables, output_file):
+        with open(output_file, 'w') as file:
+            file.write(self.compile_document(variables))
 
-    def format_map(self, map):
-        format_str, variables = self.__get_fromat_string()
 
-        def_vars = {var: map[var] for var in map if var in variables}
-        all_vars = {var: '' for var in variables}
-        all_vars.update(def_vars)
+def load_template_engine(path):
+    template_item_names = ['tape_item', 'tape', 'turing_state', 'turing_machine', 'iteration', 'document']
+    template_items = {item_name: TemplateItemFormatter(path, item_name) for item_name in template_item_names}
 
-        return format_str.format_map(all_vars)
-
-    def format(self, **args):
-        return self.format_map(args)
-
-    def inject_values(self, obj):
-        obj_attributes = {attr: getattr(obj, attr) for attr in dir(obj)}
-        return self.format_map(obj_attributes)
-
-class TemplateEngine:
-
-    def __init__(self, tape_item_format, tape_format, turing_machine_format):
-        pass
-
-def load_template(path):
-    pass
-
+    return __TemplateEngine(
+        template_items['tape_item'],
+        template_items['tape'],
+        template_items['turing_state'],
+        template_items['turing_machine'],
+        template_items['iteration'],
+        template_items['document']
+    )

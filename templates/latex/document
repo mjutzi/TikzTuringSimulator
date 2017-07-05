@@ -13,6 +13,5 @@
 \tikzstyle{tm_arrow_bottom}=[arrow box,draw,minimum size=.5cm,arrow box arrows={north:0.2cm}]
 
 \begin{document}
-% generated with TikzTuringSimulator
 <document.iterations>
 \end{document}
