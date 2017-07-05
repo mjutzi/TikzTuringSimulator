@@ -18,7 +18,7 @@ class TemplateElement:
         with open(self.__get_template_path(), 'r') as file:
             return file.read().replace('\n', '')
 
-    def __esis_emptycape_braces(self, str):
+    def __escape_braces(self, str):
         return str.replace('{', '{{').replace('}', '}}')
 
     @memoize
