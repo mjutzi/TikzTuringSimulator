@@ -60,7 +60,7 @@ def compile_turing_machine(header, commands, band_alphabet):
 
     transition_graph = _compile_transition_graph(commands, find_state)
 
-    initial_state = find_state(header.initial_state)
+    initial_state = find_state(header.initial_state) if header.initial_state else find_by_index[0]
     final_states = {find_state(descriptor) for descriptor in header.accepted_states}
 
     return TuringMachine(initial_state, final_states, transition_graph, band_alphabet)

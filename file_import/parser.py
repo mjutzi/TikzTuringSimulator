@@ -34,8 +34,6 @@ def _parse_header(str, pattern):
     match = pattern.match(str)
     assert_format(match, 'does not match header pattern', str)
 
-    default_init_state = 'q0'
-
     return Header(
         num_of_bands=_value('num_of_bands', match, int),
         num_of_states=_optional('num_of_states', match, int),
@@ -43,7 +41,7 @@ def _parse_header(str, pattern):
         chars_out=_sequence('chars_out', match),
         empty_char=_value('empty_char', match),
         accepted_states=_sequence('accepted_states', match),
-        initial_state=_optional('initial_state', match, default=default_init_state)
+        initial_state=_optional('initial_state', match)
     )
 
 
