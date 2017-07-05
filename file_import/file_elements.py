@@ -55,7 +55,7 @@ def compile_turing_machine(header, commands, band_alphabet):
             index = int(name_or_index)
             return find_by_index[index]
 
-        except (ValueError, IndexError) as error:
+        except (ValueError, IndexError):
             raise FormatException('state is unknown', name_or_index)
 
     transition_graph = _compile_transition_graph(commands, find_state)
