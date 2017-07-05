@@ -1,7 +1,7 @@
 
-\begin{{frame}}
-    \frametitle{{Iteration {ITERATION_COUNT}}}
-    \begin{{tikzpicture}}
-    {{TURING_MACHINE}}
-    \end{{tikzpicture}}
-\end{{frame}}
+\begin{frame}
+    \frametitle{Iteration <frame.iteration_count>}
+    \begin{tikzpicture}
+    <frame.turing_machine>
+    \end{tikzpicture}
+\end{frame}

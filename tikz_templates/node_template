@@ -1,1 +1,0 @@
-\node [on chain=<node.tape_index>,tm_node, <node.highlited> ] <node.specifier> {<node.value>};
