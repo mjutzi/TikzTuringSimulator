@@ -3,6 +3,7 @@ import re
 
 from file_export.caching import memorize
 
+
 class TemplateItemFormatter:
     def __init__(self, template_path, name):
         self.template_path = template_path
@@ -13,12 +14,11 @@ class TemplateItemFormatter:
 
     def __load_template(self):
         with open(self.__get_template_path(), 'r') as file:
-            return file.read().replace('\n', '')
+            return file.read()
 
     def __escape_braces(self, str):
         return str.replace('{', '{{').replace('}', '}}')
 
-    @memorize
     def __get_variable_pattern(self):
         return re.compile('<{}\.(?P<var_name>\w+)>'.format(self.name))
 
@@ -30,7 +30,6 @@ class TemplateItemFormatter:
         pattern = self.__get_variable_pattern()
         return pattern.sub(r'{\g<var_name>}', str)
 
-    @memorize
     def __get_fromat_string(self):
         template = self.__load_template()
         format_str = self.__escape_braces(template)
@@ -39,9 +38,6 @@ class TemplateItemFormatter:
         format_str = self.__adapt_template_variables(format_str)
 
         return format_str, variables
-
-    def is_empty(self):
-        return not os.path.exists(self.__get_template_path())
 
     def format_map(self, map):
         format_str, variables = self.__get_fromat_string()

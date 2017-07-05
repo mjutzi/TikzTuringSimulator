@@ -1,4 +1,5 @@
 \documentclass{beamer}
+\usepackage{calc}
 \usepackage{tikz}
 \usetikzlibrary{chains,fit,shapes}
 
