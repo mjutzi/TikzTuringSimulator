@@ -9,6 +9,9 @@ class TemplateItemFormatter:
         self.template_path = template_path
         self.name = name
 
+        self.format_str = None
+        self.variables = None
+
     def __get_template_path(self):
         return os.path.join(self.template_path, '{}_template'.format(self.name))
 
@@ -31,13 +34,14 @@ class TemplateItemFormatter:
         return pattern.sub(r'{\g<var_name>}', str)
 
     def __get_fromat_string(self):
-        template = self.__load_template()
-        format_str = self.__escape_braces(template)
+        if not self.format_str or not self.variables:
+            template = self.__load_template()
+            format_str = self.__escape_braces(template)
 
-        variables = self.__get_template_variables(format_str)
-        format_str = self.__adapt_template_variables(format_str)
+            self.variables = self.__get_template_variables(format_str)
+            self.format_str = self.__adapt_template_variables(format_str)
 
-        return format_str, variables
+        return self.format_str, self.variables
 
     def format_map(self, map):
         format_str, variables = self.__get_fromat_string()
