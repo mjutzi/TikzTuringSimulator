@@ -1,7 +1,8 @@
 <turing_machine.tapes>
-
-<turing_machine.states>
-
 \begin{scope}
-\node [tm_arrow_bottom, yshift=-.7cm] at (current_last.south) (head_bottom) {};
+\node [tm_arrow_top,yshift=.7cm] at (first_selected_tape_item.north) (head_top) {\small \textbf{<turing_machine.current_sate>}};
 \end{scope}
+\begin{scope}
+\node [tm_arrow_bottom, yshift=-.7cm] at (last_selected_tape_item.south) (head_bottom) {};
+\end{scope}
+<turing_machine.states>

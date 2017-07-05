@@ -1,8 +1,7 @@
-
-\begin{scope}[shift={(0,-{OFFSET}cm)}, start chain=<tape.index> going right,node distance=0.5mm]
-    \node [on chain=1,tm_node, tm_left] {};
-    \node [on chain=1,tm_node] {};
-    <tape.items_strings>
-    \node [on chain=1,tm_node] {};
-    \node [on chain=1,tm_node, tm_right] {};
+\begin{scope}[shift={(0, -<tape.index>cm)}, start chain=<tape.index> going right,node distance=0.5mm]
+\node [on chain=<tape.index>,regular_tape_item, tm_left] {};
+\node [on chain=<tape.index>,regular_tape_item] {};
+<tape.items>
+\node [on chain=<tape.index>,regular_tape_item] {};
+\node [on chain=<tape.index>,regular_tape_item, tm_right] {};
 \end{scope}

@@ -3,13 +3,13 @@ import os
 
 from file_export.formatting import TemplateItemFormatter
 
-TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value specifier')
+TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value type specifier')
 
 TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index items')
 
 StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name specifier')
 
-TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'states tapes')
+TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'current_sate states tapes')
 
 IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
 
@@ -49,7 +49,9 @@ class __TemplateEngine:
     def __compile_turing_machine(self, variables):
         states_str = self.__format_each(variables.states, self.__compile_state)
         tapes_str = self.__format_each(variables.tapes, self.__compile_tape)
-        return self.turing_machine_format.format(states=states_str, tapes=tapes_str)
+
+        return self.turing_machine_format.format(current_sate=variables.current_sate, states=states_str,
+                                                 tapes=tapes_str)
 
     def __compile_iteration(self, variables):
         turing_machine_string = self.__compile_turing_machine(variables.turing_machine)

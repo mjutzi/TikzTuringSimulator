@@ -1,18 +1,14 @@
 \documentclass{beamer}
-\usepackage{calc}
+\usepackage[nomessages]{fp}
 \usepackage{tikz}
 \usetikzlibrary{chains,fit,shapes}
-
 \edef\sizetape{0.7cm}
-\tikzstyle{tm_node}=[draw,minimum size=\sizetape]
-\tikzstyle{highlighted}=[fill=blue!30]
-
+\tikzstyle{regular_tape_item}=[draw,minimum size=\sizetape]
+\tikzstyle{selected_tape_item}=[draw,minimum size=\sizetape, fill=blue!30]
 \tikzstyle{tm_left}=[regular polygon, regular polygon sides=3, shape border rotate=90, draw]
 \tikzstyle{tm_right}=[regular polygon, regular polygon sides=3, shape border rotate=270, draw]
-
 \tikzstyle{tm_arrow_top}=[arrow box,draw,minimum size=.5cm,arrow box arrows={south:0.2cm}]
 \tikzstyle{tm_arrow_bottom}=[arrow box,draw,minimum size=.5cm,arrow box arrows={north:0.2cm}]
-
 \begin{document}
 <document.iterations>
 \end{document}
