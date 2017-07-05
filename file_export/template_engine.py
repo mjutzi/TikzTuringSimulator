@@ -2,10 +2,21 @@ import collections
 import os
 import re
 
-from tikz_export.caching import memorize
+from file_export.caching import memorize
 
+TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value specifier')
 
-class TemplateFormat:
+TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index items')
+
+StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'states current_state')
+
+TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'states tapes')
+
+IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
+
+DocumentTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
+
+class TemplateItemFormatter:
     def __init__(self, template_path, name):
         self.template_path = template_path
         self.name = name
@@ -61,32 +72,11 @@ class TemplateFormat:
         obj_attributes = {attr: getattr(obj, attr) for attr in dir(obj)}
         return self.format_map(obj_attributes)
 
-class TuringMachineTemplate:
+class TemplateEngine:
 
     def __init__(self, tape_item_format, tape_format, turing_machine_format):
         pass
 
-'''
-def create_turing_machine_template()
-
-
-class BeamerTemplate:
+def load_template(path):
     pass
 
-
-
-'../tikz_templates'
-def fromat_tape(index, tape):
-    index, entries = tape.as_list()
-
-
-NodeElement = collections.namedtuple('NodeElement', 'tape_index highlited specifier value')
-node = NodeElement(tape_index=1, highlited='highlited', specifier='foo', value=5)
-
-print(node._asdict())
-
-node_element = TemplateFormat('node')
-# str = node_element.format(tape_index=0, highlited='highlited', specifier='', value='1')
-str = node_element.inject_values(node)
-print(str)
-'''
