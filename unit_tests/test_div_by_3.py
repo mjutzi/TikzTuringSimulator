@@ -1,7 +1,6 @@
 from unittest import TestCase
 
 from core.tape import Tape
-from core.turing_machine import InvalidStateException
 from core.turing_states import State
 from file_import.parser import parse_lines
 
