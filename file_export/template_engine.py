@@ -7,13 +7,13 @@ TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 
 
 TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index items')
 
-StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'states current_state')
+StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name specifier')
 
 TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'states tapes')
 
 IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
 
-DocumentTemplateVariables = collections.namedtuple('DocumentTemplateVariables', 'iterations iteration_count')
+DocumentTemplateVariables = collections.namedtuple('DocumentTemplateVariables', 'iterations remark')
 
 
 class __TemplateEngine:
@@ -47,7 +47,7 @@ class __TemplateEngine:
         return self.state_format.inject_values(variables)
 
     def __compile_turing_machine(self, variables):
-        states_str = self.__format_each(variables.iterations, self.__compile_state)
+        states_str = self.__format_each(variables.states, self.__compile_state)
         tapes_str = self.__format_each(variables.tapes, self.__compile_tape)
         return self.turing_machine_format.format(states=states_str, tapes=tapes_str)
 
@@ -57,8 +57,8 @@ class __TemplateEngine:
                                             turing_machine=turing_machine_string)
 
     def compile_document(self, variables):
-        iterations_string = self.__format_each(variables.states, self.__compile_iteration)
-        return self.document_format.format(iteration_count=variables.iteration_count, iterations=iterations_string)
+        iterations_string = self.__format_each(variables.iterations, self.__compile_iteration)
+        return self.document_format.format(remark=variables.remark, iterations=iterations_string)
 
     def create_document(self, variables, output_file):
         with open(output_file, 'w') as file:
