@@ -57,6 +57,9 @@ class Tape:
         '''
         Liest den Buchstaben an der aktuellen Bandposition
         '''
+        if not self.__entries:
+            self.__entries.append(self.__get_empty_char())
+
         return self.__entries[self.__position]
 
     def write(self, char):
@@ -71,9 +74,6 @@ class Tape:
         '''
         self.__alphabet = alphabet
 
-    def poistion(self):
-        return self.__position;
-
     def non_alphabet_chars(self):
         '''
         Gibt alle buchstaben des Bandes zurück, die nicht Teil des alphabets sind.
@@ -85,6 +85,7 @@ class Tape:
 
     def as_list(self):
         return self.__position, self.__entries
+
 
 class MultiTape:
     '''

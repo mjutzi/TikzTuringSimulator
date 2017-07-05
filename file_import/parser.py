@@ -12,8 +12,8 @@ def _value(group_name, match, type=None):
     return type(result) if type else result
 
 
-def _optional(group_name, match, type=None):
-    return _value(group_name, match, type) if group_name in match.groups() else None
+def _optional(group_name, match, type=None, default=None):
+    return _value(group_name, match, type) if group_name in match.groups() else default
 
 
 def _sequence(group_name, match, sequence_length=None):
@@ -34,6 +34,8 @@ def _parse_header(str, pattern):
     match = pattern.match(str)
     assert_format(match, 'does not match header pattern', str)
 
+    default_init_state = 'q0'
+
     return Header(
         num_of_bands=_value('num_of_bands', match, int),
         num_of_states=_optional('num_of_states', match, int),
@@ -41,7 +43,7 @@ def _parse_header(str, pattern):
         chars_out=_sequence('chars_out', match),
         empty_char=_value('empty_char', match),
         accepted_states=_sequence('accepted_states', match),
-        initial_state=_optional('initial_state', match)
+        initial_state=_optional('initial_state', match, default=default_init_state)
     )
 
 
@@ -80,7 +82,7 @@ def parse_lines(all_lines, parse_format='default'):
     band_alphabet = BandAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
     turing_machine = compile_turing_machine(header, commands, band_alphabet)
 
-    return turing_machine
+    return turing_machine, band_alphabet
 
 
 def parse_file(path):
