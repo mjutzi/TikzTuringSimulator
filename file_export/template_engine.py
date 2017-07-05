@@ -1,20 +1,5 @@
-import collections
-import os
-
 from file_export.formatting import TemplateItemFormatter
-
-TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value type specifier')
-
-TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index items')
-
-StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name specifier')
-
-TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'current_sate states tapes')
-
-IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
-
-DocumentTemplateVariables = collections.namedtuple('DocumentTemplateVariables', 'iterations remark')
-
+from file_export.template_variables import *
 
 class __TemplateEngine:
     DELIMITER = '\n'
@@ -66,6 +51,8 @@ class __TemplateEngine:
         with open(output_file, 'w') as file:
             file.write(self.compile_document(variables))
 
+    def execute_postconstruct_script(self, output_file):
+        pass  # todo
 
 def load_template_engine(path):
     template_item_names = ['tape_item', 'tape', 'turing_state', 'turing_machine', 'iteration', 'document']
