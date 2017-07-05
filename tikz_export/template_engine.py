@@ -4,15 +4,14 @@ import re
 
 from tikz_export.caching import memorize
 
-TEMPLATE_DIR = '../tikz_templates'
 
-
-class TemplateElement:
-    def __init__(self, name):
+class TemplateFormat:
+    def __init__(self, template_path, name):
+        self.template_path = template_path
         self.name = name
 
     def __get_template_path(self):
-        return os.path.join(TEMPLATE_DIR, '{}_template'.format(self.name))
+        return os.path.join(self.template_path, '{}_template'.format(self.name))
 
     def __load_template(self):
         with open(self.__get_template_path(), 'r') as file:
@@ -62,13 +61,23 @@ class TemplateElement:
         obj_attributes = {attr: getattr(obj, attr) for attr in dir(obj)}
         return self.format_map(obj_attributes)
 
-class TemplateEngine:
+class TuringMachineTemplate:
+
+    def __init__(self, tape_item_format, tape_format, turing_machine_format):
+        pass
+
+'''
+def create_turing_machine_template()
+
+
+class BeamerTemplate:
     pass
 
 
+
+'../tikz_templates'
 def fromat_tape(index, tape):
     index, entries = tape.as_list()
-
 
 
 NodeElement = collections.namedtuple('NodeElement', 'tape_index highlited specifier value')
@@ -76,7 +85,8 @@ node = NodeElement(tape_index=1, highlited='highlited', specifier='foo', value=5
 
 print(node._asdict())
 
-node_element = TemplateElement('node')
+node_element = TemplateFormat('node')
 # str = node_element.format(tape_index=0, highlited='highlited', specifier='', value='1')
 str = node_element.inject_values(node)
 print(str)
+'''
