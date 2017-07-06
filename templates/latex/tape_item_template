@@ -1,1 +1,1 @@
-\node [on chain=<tape_item.tape_index>,<tape_item.type>] (<tape_item.specifier>){<tape_item.value>};
+\node [on chain=<tape_item.tape_index>,<tape_item.type>] (<tape_item.type>_<tape_item.tape_index>){<tape_item.value>};

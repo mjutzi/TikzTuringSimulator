@@ -1,0 +1,4 @@
+\begin{scope}[shift={(0, 0cm)}, start chain=states going right,node distance=0.2mm]
+\node [on chain=states,regular_state] (){\small States:};
+<states.items>
+\end{scope}

@@ -1,9 +1,6 @@
 import os
 import re
 
-from file_export.caching import memorize
-
-
 class TemplateItemFormatter:
     def __init__(self, template_path, name):
         self.template_path = template_path

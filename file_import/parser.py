@@ -1,6 +1,6 @@
 import os
 
-from core.tape import BandAlphabet
+from core.tape import TapeAlphabet
 from file_import.file_elements import Header, Command, compile_turing_machine
 from file_import.file_formats import DEFAULT_COMMAND_PATTERN, DEFAULT_HEADER_PATTERN, DEFAULT_IGNORE_LINE
 from file_import.file_formats import CUSTOM_COMMAND_PATTERN, CUSTOM_HEADER_PATTERN, CUSTOM_IGNORE_LINE
@@ -77,7 +77,7 @@ def parse_lines(all_lines, parse_format='default'):
     header = _parse_header(lines[0], header_pattern)
     commands = [_parse_command(line, header.num_of_bands, command_pattern) for line in lines[1:]]
 
-    band_alphabet = BandAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
+    band_alphabet = TapeAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
     turing_machine = compile_turing_machine(header, commands, band_alphabet)
 
     return turing_machine, band_alphabet

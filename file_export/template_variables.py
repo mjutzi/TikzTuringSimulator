@@ -1,12 +1,12 @@
 import collections
 
-TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value type specifier')
+TapeItemTemplateVariables = collections.namedtuple('TapeItemTemplateVariables', 'tape_index value type')
 
 TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index items')
 
-StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name specifier')
+StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name type')
 
-TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'current_sate states tapes')
+TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'states tapes')
 
 IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'turing_machine iteration_count')
 

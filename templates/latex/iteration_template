@@ -1,6 +1,8 @@
 \begin{frame}
 \frametitle{Iteration <iteration.iteration_count>}
 \begin{tikzpicture}
+
 <iteration.turing_machine>
+
 \end{tikzpicture}
 \end{frame}

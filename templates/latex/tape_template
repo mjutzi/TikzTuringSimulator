@@ -1,7 +1,7 @@
-\begin{scope}[shift={(0, -<tape.index>cm)}, start chain=<tape.index> going right,node distance=0.5mm]
-\node [on chain=<tape.index>,regular_tape_item, tm_left] {};
-\node [on chain=<tape.index>,regular_tape_item] {};
+% tape <tape.index>
+\begin{scope}[shift={(0, -1.5*(<tape.index>+1)cm)}, start chain=<tape.index> going right,node distance=0.5mm]
+\node [on chain=<tape.index>,regular_tape_item, draw=none] {$\cdots$};
 <tape.items>
-\node [on chain=<tape.index>,regular_tape_item] {};
-\node [on chain=<tape.index>,regular_tape_item, tm_right] {};
+\node [on chain=<tape.index>,regular_tape_item, draw=none] {$\cdots$};
+\node [head,yshift=0.3cm] at (selected_tape_item_<tape.index>.north) {\tiny index: 3};
 \end{scope}

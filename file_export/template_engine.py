@@ -1,19 +1,22 @@
 from file_export.formatting import TemplateItemFormatter
 from file_export.template_variables import *
 
-class __TemplateEngine:
+
+class _TemplateEngine:
     DELIMITER = '\n'
 
     def __init__(self,
                  tape_item_format,
                  tape_format,
                  state_format,
+                 states_format,
                  turing_machine_format,
                  iteration_format,
                  document_format):
         self.tape_item_format = tape_item_format
         self.tape_format = tape_format
         self.state_format = state_format
+        self.states_format = states_format
         self.turing_machine_format = turing_machine_format
         self.iteration_format = iteration_format
         self.document_format = document_format
@@ -31,12 +34,14 @@ class __TemplateEngine:
     def __compile_state(self, variables):
         return self.state_format.inject_values(variables)
 
-    def __compile_turing_machine(self, variables):
-        states_str = self.__format_each(variables.states, self.__compile_state)
-        tapes_str = self.__format_each(variables.tapes, self.__compile_tape)
+    def __compile_states(self, states):
+        states_str = self.__format_each(states, self.__compile_state)
+        return self.states_format.format(items=states_str)
 
-        return self.turing_machine_format.format(current_sate=variables.current_sate, states=states_str,
-                                                 tapes=tapes_str)
+    def __compile_turing_machine(self, variables):
+        states_str = self.__compile_states(variables.states)
+        tapes_str = self.__format_each(variables.tapes, self.__compile_tape)
+        return self.turing_machine_format.format(states=states_str, tapes=tapes_str)
 
     def __compile_iteration(self, variables):
         turing_machine_string = self.__compile_turing_machine(variables.turing_machine)
@@ -54,14 +59,16 @@ class __TemplateEngine:
     def execute_postconstruct_script(self, output_file):
         pass  # todo
 
+
 def load_template_engine(path):
-    template_item_names = ['tape_item', 'tape', 'turing_state', 'turing_machine', 'iteration', 'document']
+    template_item_names = ['tape_item', 'tape', 'state', 'states', 'turing_machine', 'iteration', 'document']
     template_items = {item_name: TemplateItemFormatter(path, item_name) for item_name in template_item_names}
 
-    return __TemplateEngine(
+    return _TemplateEngine(
         template_items['tape_item'],
         template_items['tape'],
-        template_items['turing_state'],
+        template_items['state'],
+        template_items['states'],
         template_items['turing_machine'],
         template_items['iteration'],
         template_items['document']
