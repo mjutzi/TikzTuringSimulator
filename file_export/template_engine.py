@@ -47,7 +47,9 @@ class _TemplateEngine:
     def __compile_iteration(self, variables):
         turing_machine_string = self.__compile_turing_machine(variables.turing_machine)
         return self.iteration_format.format(iteration_count=variables.iteration_count,
-                                            turing_machine=turing_machine_string)
+                                            turing_machine=turing_machine_string,
+                                            new_chars=variables.new_chars,
+                                            move_directions=variables.move_directions)
 
     def compile_document(self, variables):
         iterations_string = self.__format_each(variables.iterations, self.__compile_iteration)
