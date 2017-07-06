@@ -44,3 +44,7 @@ class TransitionGraph:
         event = HashableTransitionEvent(current_state=current_state, read_chars=read_chars)
         target = self.__transitions_map[event] if event in self.__transitions_map else None
         return event, target
+
+    @property
+    def states(self):
+        return {event.current_state for event in self.__transitions_map}

@@ -1,28 +1,44 @@
 from unittest import TestCase
 
+from core.tape import Tape, MultiTape, Direction
+from core.turing_states import State, TransitionTarget
 from file_export.template_engine import *
+from file_export.varible_factories import create_iteration_variables
 
 
 class TestLaTeXTemplate(TestCase):
-    def test_generation_of_latex_file(self):
-        item00 = TapeItemTemplateVariables(tape_index=0, value='00', type='regular_tape_item')
-        item01 = TapeItemTemplateVariables(tape_index=0, value='01', type='selected_tape_item')
-        item02 = TapeItemTemplateVariables(tape_index=0, value='02', type='regular_tape_item')
+    def test_generation_of_multitape_file(self):
+        tape0 = Tape(['01', '02', '03', '04', '05', '06', '07', '08', '09'])
+        tape1 = Tape(['11', '12', '13', '14', '15', '16', '17', '18', '19'])
 
-        item10 = TapeItemTemplateVariables(tape_index=1, value='10', type='regular_tape_item')
-        item11 = TapeItemTemplateVariables(tape_index=1, value='11', type='selected_tape_item')
-        item12 = TapeItemTemplateVariables(tape_index=1, value='12', type='regular_tape_item')
+        tape = MultiTape([tape0, tape1])
+        states = [State(index=0, name='q0'), State(index=1, name='q1'), State(index=2, name='q2'),
+                  State(index=3, name='q3')]
 
-        tape0 = TapeTemplateVariables(index=0, items=[item00, item01, item02])
-        tape1 = TapeTemplateVariables(index=1, items=[item10, item11, item12])
+        directions = [[Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.NONE, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT]]
 
-        state0 = StateTemplateVariables(name='q0', type='regular_state')
-        state1 = StateTemplateVariables(name='q1', type='selected_state')
+        iterations = []
+        for iteration, direction in enumerate(directions):
+            target = TransitionTarget(new_state=states[iteration % len(states)],
+                                      new_chars=['x', 'y'],
+                                      move_directions=direction)
 
-        turing_machine = TuringMachineTemplateVariables(states=[state0, state1], tapes=[tape0, tape1])
-        iteration0 = IterationTemplateVariables(turing_machine=turing_machine, iteration_count=0)
+            tape.move(target.move_directions)
+            tape.write(target.new_chars)
 
-        document = DocumentTemplateVariables(iterations=[iteration0], remark=None)
+            iter_vars = create_iteration_variables(iteration, tape, target.new_state, states, 8)
+            iterations.append(iter_vars)
+
+        document = DocumentTemplateVariables(iterations=iterations, remark=None)
 
         path2template = '../../templates/latex'
         template_engine = load_template_engine(path2template)

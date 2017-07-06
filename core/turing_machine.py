@@ -45,3 +45,7 @@ class TuringMachine:
                 current_state = None
 
             yield event, target
+
+    @property
+    def states(self):
+        return self.transition_graph.states

@@ -29,7 +29,8 @@ class _TemplateEngine:
 
     def __compile_tape(self, variables):
         items_string = self.__format_each(variables.items, self.__compile_item)
-        return self.tape_format.format(index=variables.index, items=items_string)
+        return self.tape_format.format(index=variables.index, items=items_string,
+                                       current_item_index=variables.current_item_index)
 
     def __compile_state(self, variables):
         return self.state_format.inject_values(variables)

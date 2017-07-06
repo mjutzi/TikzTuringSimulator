@@ -8,8 +8,8 @@
 \tikzstyle{regular_state}=[draw=none, circle, minimum size=\sizestate]
 \tikzstyle{selected_state}=[draw, circle, minimum size=\sizestate]
 
-\tikzstyle{regular_tape_item}=[draw, minimum size=\sizetape]
-\tikzstyle{selected_tape_item}=[draw, minimum size=\sizetape, fill=blue!20]
+\tikzstyle{regular_item}=[draw, minimum size=\sizetape]
+\tikzstyle{selected_item}=[draw, minimum size=\sizetape, fill=blue!20]
 \tikzstyle{head}=[arrow box, draw, minimum size=.1cm, fill=white, arrow box arrows={south:0.2cm}]
 
 % __ begin document __
