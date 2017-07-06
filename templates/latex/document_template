@@ -6,7 +6,7 @@
 \edef\sizestate{0.2cm}
 
 \tikzstyle{regular_state}=[draw=none, circle, minimum size=\sizestate]
-\tikzstyle{selected_state}=[draw, circle, minimum size=\sizestate]
+\tikzstyle{selected_state}=[draw=gray, circle, minimum size=\sizestate]
 
 \tikzstyle{regular_item}=[draw, minimum size=\sizetape]
 \tikzstyle{selected_item}=[draw, minimum size=\sizetape, fill=blue!20]

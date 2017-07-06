@@ -1,1 +1,1 @@
-\node [on chain=states,<state.type>] (<state.specifier>){\small <state.name>};
+\node [on chain=states,<state.type>] (<state.specifier>){\tiny <state.name>};

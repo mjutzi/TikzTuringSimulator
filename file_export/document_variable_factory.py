@@ -62,7 +62,8 @@ class DocumentVariableFactory:
             tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
 
         iter_var = IterationTemplateVariables(
-            iteration_count=len(self.__iterations),
+            iteration_count=len(self.__iterations) + 1,
+            remarks='',
             new_chars=transition_target.new_chars,
             move_directions=transition_target.move_directions,
             turing_machine=turing_var)

@@ -49,7 +49,8 @@ class _TemplateEngine:
         return self.iteration_format.format(iteration_count=variables.iteration_count,
                                             turing_machine=turing_machine_string,
                                             new_chars=variables.new_chars,
-                                            move_directions=variables.move_directions)
+                                            move_directions=variables.move_directions,
+                                            remarks=variables.remarks)
 
     def compile_document(self, variables):
         iterations_string = self.__format_each(variables.iterations, self.__compile_iteration)
