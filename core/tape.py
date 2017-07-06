@@ -151,3 +151,7 @@ class MultiTape:
     @property
     def inner_tapes(self):
         return self.__tapes
+
+
+def parse_tape(string):
+    raise NotImplementedError()  # TODO

@@ -10,9 +10,9 @@ class TuringMachine:
         self.transition_graph = transition_graph
         self.alphabet = alphabet
 
-    def assert_has_only_alphabet_chars(self, tape):
+    def assert_charset(self, tape):
         '''
-        Prüft ob das Band nur character aus dem gesetzten Alphabet hat.
+        Prüft ob das Band nur character aus dem gesetzten Alphabet hat und setzt das Bandalphabet, des Tape Objektes.
         '''
         tape.set_alphabet(self.alphabet)
         non_alphabet_chars = tape.non_alphabet_chars()
