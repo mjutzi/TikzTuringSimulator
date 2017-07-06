@@ -26,7 +26,24 @@ class TestLaTeXTemplate(TestCase):
                       [Direction.RIGHT, Direction.RIGHT],
                       [Direction.RIGHT, Direction.RIGHT],
                       [Direction.RIGHT, Direction.RIGHT],
-                      [Direction.RIGHT, Direction.RIGHT]]
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.RIGHT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT],
+                      [Direction.LEFT, Direction.RIGHT]]
 
         for iteration, direction in enumerate(directions):
             target = TransitionTarget(new_state=states[iteration % len(states)],

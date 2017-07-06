@@ -14,23 +14,26 @@ def _create_tape_vars(entries, current_item_index, tape_index, offset=0):
     return TapeTemplateVariables(index=tape_index, items=items, current_item_index=current_item_index)
 
 
-def _clamp(entries, left, right):
-    l = max(0, left)
-    r = min(len(entries), right)
-    return entries[l:r], left, right
+def _clamp(entries, view_point, max_length):
+    n = len(entries)
+    limit = min(max_length, n)
+
+    half = (limit + 1) // 2
+    d_mid_l = view_point - half
+    d_mid_r = view_point + half
+
+    if d_mid_l < 0:
+        return entries[0:limit], 0
+
+    if d_mid_r > n:
+        return entries[n - limit:n], n - limit
+
+    return entries[d_mid_l:d_mid_r], d_mid_l
 
 
 def _create_single_tape_vars(d1_tape, tape_index, limit):
-    item_index = d1_tape.position
-    entries = d1_tape.entries
-    offset = 0
-
-    if item_index <= limit:
-        entries, offset, _ = _clamp(entries, 0, limit)
-    else:
-        entries, offset, _ = _clamp(entries, item_index - limit // 2, item_index + limit // 2)
-
-    return _create_tape_vars(entries, item_index, tape_index, offset)
+    entries, offset = _clamp(d1_tape.entries, d1_tape.position, limit)
+    return _create_tape_vars(entries, d1_tape.position, tape_index, offset)
 
 
 def create_tape_vars(tape, limit_items_to):
