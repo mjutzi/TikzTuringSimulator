@@ -19,16 +19,16 @@ def _clamp(entries, view_point, max_length):
     limit = min(max_length, n)
 
     half = (limit + 1) // 2
-    d_mid_l = view_point - half
-    d_mid_r = view_point + half
+    mid_l = view_point - half
+    mid_r = view_point + half
 
-    if d_mid_l < 0:
+    if mid_l < 0:
         return entries[0:limit], 0
 
-    if d_mid_r > n:
+    if mid_r > n:
         return entries[n - limit:n], n - limit
 
-    return entries[d_mid_l:d_mid_r], d_mid_l
+    return entries[mid_l:mid_r], mid_l
 
 
 def _create_single_tape_vars(d1_tape, tape_index, limit):
@@ -57,16 +57,10 @@ class DocumentVariableFactory:
         self.__iterations = []
 
     def add_iteration(self, transition_target):
-        turing_var = TuringMachineTemplateVariables(
+        iter_var = IterationTemplateVariables(
+            index=len(self.__iterations) + 1,
             states=_create_state_vars(self.__states, transition_target.new_state),
             tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
-
-        iter_var = IterationTemplateVariables(
-            iteration_count=len(self.__iterations) + 1,
-            remarks='',
-            new_chars=transition_target.new_chars,
-            move_directions=transition_target.move_directions,
-            turing_machine=turing_var)
 
         self.__iterations.append(iter_var)
 

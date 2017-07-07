@@ -67,7 +67,8 @@ class _GernericInputParser(_InputParser):
 
     def _parse_tape_list(self, string):
         open_pos = [match.end() for match in self.__tape_open_ptrn.finditer(string)]
-        close_pos = [match.start() for match in self.__tape_close_ptrn.finditer(string)]
+        close_pos = [match.start() for match in self.__tape_close_ptrn.finditer(string)]  # todo simplify
+
         assert_format(len(open_pos) == len(close_pos), 'mismatch of opening an closing tags', string)
         return [self._parse_single_tape(string[l:r]) for l, r in zip(open_pos, close_pos)]
 

@@ -6,9 +6,6 @@ TapeTemplateVariables = collections.namedtuple('TapeTemplateVariables', 'index i
 
 StateTemplateVariables = collections.namedtuple('StateTemplateVariables', 'name type')
 
-TuringMachineTemplateVariables = collections.namedtuple('TuringMachineTemplateVariables', 'states tapes')
-
-IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables',
-                                                    'turing_machine iteration_count remarks new_chars move_directions')
+IterationTemplateVariables = collections.namedtuple('IterationTemplateVariables', 'index states tapes')
 
 DocumentTemplateVariables = collections.namedtuple('DocumentTemplateVariables', 'iterations remark')

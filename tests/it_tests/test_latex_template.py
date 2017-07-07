@@ -2,8 +2,8 @@ from unittest import TestCase
 
 from core.tape import Tape, MultiTape, Direction
 from core.turing_states import State, TransitionTarget
-from file_export.template_engine import *
 from file_export.document_variable_factory import DocumentVariableFactory
+from file_export.template_engine import *
 
 
 class TestLaTeXTemplate(TestCase):
@@ -58,7 +58,7 @@ class TestLaTeXTemplate(TestCase):
         document = docfactory.document_variables()
 
         path2template = '../../templates/latex'
-        template_engine = load_template_engine(path2template)
+        template_engine = TemplateEngine.load(path2template)
 
         path2file = 'tex_file.tex'
         template_engine.create_document(document, path2file)

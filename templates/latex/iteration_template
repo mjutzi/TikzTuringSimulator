@@ -2,6 +2,7 @@
 % <iteration.iteration_count>
 \frametitle{Iteration <iteration.iteration_count>}
 \begin{tikzpicture}
-<iteration.turing_machine>
+<iteration.states>
+<iteration.tapes>
 \end{tikzpicture}
 \end{frame}
