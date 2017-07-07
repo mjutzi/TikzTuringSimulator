@@ -1,5 +1,4 @@
-import argparse
-from core.tape import parse_tape
+from core.tape_parser import parse_tape
 from file_import.parser import parse_file
 
 
@@ -53,3 +52,16 @@ class VisualizeTM:
 
     def visualize(self):
         pass
+
+
+# TODO:
+'''
+TODO
+ - compile latex file 1.5 h
+ - parse tape 0.5h
+ - call viewer 0.5h
+ - parse args and run program 2h
+ - test n debug 2h
+ ----------
+ > DONE in 5h
+'''

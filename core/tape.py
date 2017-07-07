@@ -1,6 +1,5 @@
-from enum import Enum
-
 import collections
+from enum import Enum
 
 from core.tape_expansion import EXPAND_ALL
 
@@ -95,6 +94,7 @@ class Tape:
     def inner_tapes(self):
         return [self]
 
+
 class MultiTape:
     '''
     Beschreibt ein mehrdimensionales Turingband als Kollektion eindimensionaler Turingbänder.
@@ -151,7 +151,3 @@ class MultiTape:
     @property
     def inner_tapes(self):
         return self.__tapes
-
-
-def parse_tape(string):
-    raise NotImplementedError()  # TODO
