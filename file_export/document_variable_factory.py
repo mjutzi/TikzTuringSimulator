@@ -36,7 +36,7 @@ def _create_single_tape_vars(d1_tape, tape_index, limit):
     return _create_tape_vars(entries, d1_tape.position, tape_index, offset)
 
 
-def create_tape_vars(tape, limit_items_to):
+def _create_tapes_vars(tape, limit_items_to):
     return [_create_single_tape_vars(d1_tape, tape_index, limit_items_to)
             for tape_index, d1_tape in enumerate(tape.inner_tapes)]
 
@@ -60,7 +60,7 @@ class DocumentVariableFactory:
         iter_var = IterationTemplateVariables(
             index=len(self.__iterations) + 1,
             states=_create_state_vars(self.__states, transition_target.new_state),
-            tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
+            tapes=_create_tapes_vars(self.__tape, self.__tape_item_limit))
 
         self.__iterations.append(iter_var)
 
