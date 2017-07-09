@@ -64,5 +64,8 @@ class DocumentVariableFactory:
 
         self.__iterations.append(iter_var)
 
+    def empty(self):
+        return not self.__iterations
+
     def document_variables(self, remark=''):
         return DocumentTemplateVariables(iterations=self.__iterations, remark=remark)

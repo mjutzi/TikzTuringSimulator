@@ -60,5 +60,5 @@ class TestLaTeXTemplate(TestCase):
         path2template = '../../templates/latex'
         template_engine = TemplateEngine.load(path2template)
 
-        path2file = 'tex_file.tex'
-        template_engine.create_document(document, path2file)
+        path2dir = '/home/martin.jutzi/Temp/'
+        template_engine.create_document(document, path2dir)

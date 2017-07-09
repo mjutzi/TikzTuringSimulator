@@ -1,5 +1,11 @@
+import os
+
 from core.tape_parser import parse_tape
+from file_export.document_variable_factory import DocumentVariableFactory
+from file_export.template_engine import TemplateEngine
 from file_import.parser import parse_file
+
+from utils.os_utils import os_open_command, open_with
 
 
 class ExecuteTM:
@@ -35,31 +41,60 @@ class ExecuteTM:
 
 
 class VisualizeTM:
-    def __init__(self, document_var_factory, template_engine, template_path):
-        pass
+    def __init__(self, output_dir, template_engine, viewer):
+        self.__output_dir = output_dir
+        self.__template_engine = template_engine
+        self.__viewer = viewer
+
+        self.__doc_factory = None
+        self.__generated_file = None
+
+    def create(self, output_dir, template_path, viewer=os_open_command()):
+        os.makedirs(self.__output_dir, exist_ok=True)
+        template_engine = TemplateEngine.load(template_path)
+        return VisualizeTM(output_dir, template_engine, viewer)
 
     def register_state(self, tape, states):
-        pass
+        self.__doc_factory = DocumentVariableFactory(tape, states)
 
     def register_iteration(self, transition_event, transition_target):
-        pass
-
-    def write_file(self, path):
-        pass
+        self.__doc_factory.add_iteration(transition_target)
 
     def set_viewer(self, viewername):
-        pass
+        self.__viewer = viewername
+
+    def write_file(self):
+        if not self.__doc_factory:
+            raise RuntimeError('No state registered.')
+
+        if self.__doc_factory.empty():
+            raise RuntimeError('No iterations registered.')
+
+        doc_vars = self.__doc_factory.document_variables()
+        self.__generated_file = self.__template_engine.create_document(doc_vars, self.__output_dir)
 
     def visualize(self):
-        pass
+        if not self.__generated_file:
+            self.write_file()
+
+        open_with(self.__generated_file, self.__viewer)
+
+
+
+
+class RunConfiguration:
+    def __init__(self, output_dir):
+        self.args['output_dir']
+
+        self.output_dir = output_dir
+        self.template_path = 'templates/latex'
+        self.viewer = os_open_command()
 
 
 # TODO:
 '''
 TODO
  - compile latex file 1.5 h
- - parse tape 0.5h
- - call viewer 0.5h
  - parse args and run program 2h
  - test n debug 2h
  ----------

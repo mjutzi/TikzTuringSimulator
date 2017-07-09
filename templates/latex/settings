@@ -1,0 +1,3 @@
+doc_name: document.tex
+gen_name: document.pdf
+compile_cmd: pdflatex document.tex
