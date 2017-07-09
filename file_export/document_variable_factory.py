@@ -41,18 +41,22 @@ def create_tape_vars(tape, limit_items_to):
             for tape_index, d1_tape in enumerate(tape.inner_tapes)]
 
 
-def _create_state_vars(states, current_state):
-    def state_type(state):
-        return 'selected_state' if state == current_state  else 'regular_state'
+def _create_state_vars(states, current_state, limit):
+    current_state_idx = current_state.index if current_state else 0
 
-    return [StateTemplateVariables(name=state.name, type=state_type(state)) for state in states]
+    def state_type(state):
+        return 'selected_state' if state.index == current_state_idx  else 'regular_state'
+
+    state_list, _ = _clamp(list(states), current_state_idx, limit)
+    return [StateTemplateVariables(name=state.name, type=state_type(state)) for state in state_list]
 
 
 class DocumentVariableFactory:
-    def __init__(self, tape, states, tape_item_limit=12):
+    def __init__(self, tape, states, tape_item_limit=12, state_item_limit=12):
         self.__tape = tape
         self.__states = states
         self.__tape_item_limit = tape_item_limit
+        self.__state_item_limit = state_item_limit
 
         self.__iterations = []
         self.__remark = ''
@@ -61,7 +65,7 @@ class DocumentVariableFactory:
         selected_state = transition_target.new_state if transition_target else None
         iter_var = IterationTemplateVariables(
             index=len(self.__iterations),
-            states=_create_state_vars(self.__states, selected_state),
+            states=_create_state_vars(self.__states, selected_state, self.__state_item_limit),
             tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
 
         self.__iterations.append(iter_var)
