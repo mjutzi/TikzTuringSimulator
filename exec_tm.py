@@ -114,7 +114,7 @@ class PrintTM:
 
 
 '''
-TODO parse commands
+TODO debug commands
 '''
 parser = argparse.ArgumentParser(description='Visualizes Turing Machines')
 parser.add_argument('--turing_program', help='the path to the turing program')
