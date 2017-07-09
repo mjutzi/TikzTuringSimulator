@@ -11,12 +11,15 @@ Header = collections.namedtuple('Header',
 
 Command = collections.namedtuple('Command', 'current_state read_chars new_state new_chars move_directions')
 
-_cmp_norm_pattern = re.compile('[^\d]+(?P<index>\d+)')
+_name_idx_ptrn = re.compile('(?P<name>[^\d]+)(?P<index>\d+)')
 
 
-def _cmp_name(str):
-    match = _cmp_norm_pattern.match(str)
-    return int(match.group('index')) if match else str
+def _name_index_tuple(str):
+    match = _name_idx_ptrn.match(str)
+    name = match.group('name') if match else str
+    index = int(match.group('index')) if match else 0
+
+    return name, index
 
 
 def _compile_states(commands):
@@ -24,7 +27,7 @@ def _compile_states(commands):
     states2 = {command.new_state for command in commands}
 
     state_names = list(states1 | states2)
-    state_names.sort(key=_cmp_name)
+    state_names.sort(key=_name_index_tuple)
 
     states = [State(index=index, name=name) for index, name in enumerate(state_names)]
 
