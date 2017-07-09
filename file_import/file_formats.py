@@ -22,7 +22,7 @@ DEFAULT_HEADER_PATTERN = re.compile('(?P<num_of_bands>\d+)'
 DEFAULT_COMMAND_PATTERN = re.compile('\s*(?P<current_state>[^,\s]+)\s*,'
                                      '\s*(?P<read_chars>[^>]+)\s*>'
                                      '\s*(?P<new_state>[^,\s]+)\s*,'
-                                     '\s*(?P<new_chars>[^LR]+)\s*,'
+                                     '\s*(?P<new_chars>[^LNR]+)\s*,'
                                      '\s*(?P<move_directions>[LRN\s,]+)\s*')
 
 CUSTOM_IGNORE_LINE = re.compile('^(\s*)|(\s*#.*)$')

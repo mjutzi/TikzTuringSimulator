@@ -1,11 +1,10 @@
-import os
 import argparse
+import os
 
 from core.tape_parser import parse_tape, load_tape
 from file_export.document_variable_factory import DocumentVariableFactory
 from file_export.template_engine import TemplateEngine
 from file_import.parser import parse_file
-
 from utils.os_utils import os_open_command, open_with
 
 
@@ -119,10 +118,10 @@ parser.add_argument('--template', help='the path to the turing program')
 parser.add_argument('--tape_item_limit', help='the path to the turing program')
 parser.add_argument('--verbose', help='the path to the turing program')
 
-file_to_tm = '/home/martin.jutzi/Temp/Program.tm'
+file_to_tm = '/home/martin_jutzi/Temp/teilfolge.txt'
 tm_executor = ExecuteTM._parse_file(file_to_tm)
 
-template_path = '/home/martin.jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
+template_path = '/home/martin_jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
 tape_item_limit = 12
 viewer = ''
 
@@ -134,7 +133,7 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1,1,0,0'
+tape_str = '1,1,0,1,-,0,0,1,1; '
 tm_executor.execute_TM(tape_str)
 
 output_dir = '/home/martin.jutzi/Temp'

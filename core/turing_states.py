@@ -9,7 +9,7 @@ class HashableTransitionEvent(TransitionEvent):
     def __hash__(self):
         h1 = hash(self.current_state.index)
         h2 = hash(tuple(self.read_chars))
-        return h1 | (h2 << 4)
+        return h1 ^ (h2 << 4)
 
 
 TransitionTarget = collections.namedtuple('TransitionTarget', 'new_state new_chars move_directions')

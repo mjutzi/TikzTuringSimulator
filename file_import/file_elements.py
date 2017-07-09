@@ -37,7 +37,7 @@ def _compile_transition_graph(commands, find_state):
         target = TransitionTarget(
             new_state=find_state(command.new_state),
             new_chars=command.new_chars,
-            move_directions=directions[command.move_directions])
+            move_directions=[directions[d] for d in command.move_directions])
 
         transition_graph.register_transition(current_state, read_chars, target)
 
