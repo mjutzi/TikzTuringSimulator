@@ -58,7 +58,11 @@ class VisualizeTM:
         self.__doc_factory = DocumentVariableFactory(tape, states, self.__tape_item_limit)
 
     def register_iteration(self, transition_event, transition_target):
-        self.__doc_factory.add_iteration(transition_target)
+        if transition_target:
+            self.__doc_factory.add_iteration(transition_target)
+            self.__doc_factory.set_remark('Input is valid.')
+        else:
+            self.__doc_factory.set_remark('Input is invalid.')
 
     def set_viewer(self, viewername):
         self.__viewer = viewername
@@ -118,7 +122,7 @@ parser.add_argument('--template', help='the path to the turing program')
 parser.add_argument('--tape_item_limit', help='the path to the turing program')
 parser.add_argument('--verbose', help='the path to the turing program')
 
-file_to_tm = '/home/martin_jutzi/Temp/collatz.txt'
+file_to_tm = '/home/martin_jutzi/Temp/divisiontest7.txt'
 tm_executor = ExecuteTM._parse_file(file_to_tm)
 
 template_path = '/home/martin_jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
@@ -133,7 +137,7 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1,0,0,1,1,1,1,0,1,0,1,1'
+tape_str = '1,1,1'
 tm_executor.execute_TM(tape_str)
 
 output_dir = '/home/martin_jutzi/Temp'

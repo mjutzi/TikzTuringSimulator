@@ -10,9 +10,10 @@
 
 \tikzstyle{regular_item}=[draw, minimum size=\sizetape]
 \tikzstyle{selected_item}=[draw, minimum size=\sizetape, fill=blue!20]
-\tikzstyle{head}=[arrow box, draw, minimum size=.1cm, fill=white, arrow box arrows={south:0.2cm}]
+\tikzstyle{tm_head}=[arrow box, draw, minimum size=.1cm, fill=white, arrow box arrows={south:0.2cm}]
 
 % __ begin document __
 \begin{document}
 <document.iterations>
+<document.remark>
 \end{document}

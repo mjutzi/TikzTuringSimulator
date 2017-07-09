@@ -13,7 +13,7 @@ class TemplateEngine:
 
     @staticmethod
     def load(path, delimter='\n'):
-        template_item_names = ['tape_item', 'tape', 'state', 'states', 'iteration', 'document']
+        template_item_names = ['tape_item', 'tape', 'state', 'states', 'iteration', 'remark', 'document']
         template_items = {item_name: TemplateItemFormatter(path, item_name) for item_name in template_item_names}
 
         default_settings = {'doc_name': 'document', 'gen_name': 'document', 'compile_cmd': None}
@@ -47,8 +47,11 @@ class TemplateEngine:
                                         states=self.__compile_states(variables.states),
                                         tapes=self.__format_each(variables.tapes, self.__compile_tape))
 
+    def __compile_remark(self, remark):
+        return self['remark'].format(text=remark) if remark else ''
+
     def compile_document(self, variables):
-        return self['document'].format(remark=variables.remark,
+        return self['document'].format(remark=self.__compile_remark(variables.remark),
                                        iterations=self.__format_each(variables.iterations, self.__compile_iteration))
 
     def _run_compile_cmd(self, out_dir):

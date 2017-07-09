@@ -3,5 +3,5 @@
 \node [on chain=<tape.index>,regular_item, draw=none] {$\cdots$};
 <tape.items>
 \node [on chain=<tape.index>,regular_item, draw=none] {$\cdots$};
-\node [head,yshift=0.3cm] at (selected_item_<tape.index>.north) {\tiny index: <tape.current_item_index>};
+\node [tm_head,yshift=0.3cm] at (selected_item_<tape.index>.north) {\tiny index: <tape.current_item_index>};
 \end{scope}

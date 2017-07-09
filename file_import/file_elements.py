@@ -1,4 +1,5 @@
 import collections
+import re
 
 from core.tape import Direction
 from core.turing_machine import TuringMachine
@@ -10,13 +11,20 @@ Header = collections.namedtuple('Header',
 
 Command = collections.namedtuple('Command', 'current_state read_chars new_state new_chars move_directions')
 
+_cmp_norm_pattern = re.compile('[^\d]+(?P<index>\d+)')
+
+
+def _cmp_name(str):
+    match = _cmp_norm_pattern.match(str)
+    return int(match.group('index')) if match else str
+
 
 def _compile_states(commands):
     states1 = {command.current_state for command in commands}
     states2 = {command.new_state for command in commands}
 
     state_names = list(states1 | states2)
-    state_names.sort()
+    state_names.sort(key=_cmp_name)
 
     states = [State(index=index, name=name) for index, name in enumerate(state_names)]
 
