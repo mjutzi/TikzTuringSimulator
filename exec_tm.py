@@ -12,6 +12,7 @@ class ExecuteTM:
     '''
     Hilfklasse zum ausführen von Turing maschinen.
     '''
+
     def __init__(self, turing_machine, observer=None):
         self.__turing_machine = turing_machine
         self.__observer = observer if observer else []
@@ -28,9 +29,16 @@ class ExecuteTM:
         for observer in self.__observer:
             observer.register_iteration(transition_event, transition_target)
 
+    def _get_tape(self, input_string, num_of_tapes):
+        if os.path.isfile(input_string):
+            return load_tape(input_string, num_of_tapes)
+        else:
+            return parse_tape(input_string, num_of_tapes)
+
     def execute_TM(self, input_string):
 
-        tape = load_tape(input_string) if os.path.isfile(input_string) else parse_tape(input_string)
+        num_of_tapes = self.__turing_machine.num_of_tapes
+        tape = self._get_tape(input_string, num_of_tapes)
         self.__turing_machine.assert_charset(tape)
         self.__init_observer(tape)
 
@@ -126,7 +134,7 @@ parser.add_argument('--template', help='the path to the turing program')
 parser.add_argument('--tape_item_limit', help='the path to the turing program')
 parser.add_argument('--verbose', help='the path to the turing program')
 
-file_to_tm = '/home/martin_jutzi/Temp/divisiontest7.txt'
+file_to_tm = '/home/martin_jutzi/Temp/teilfolge.txt'
 tm_executor = ExecuteTM._parse_file(file_to_tm)
 
 template_path = '/home/martin_jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
@@ -141,7 +149,7 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1,1,1'
+tape_str = '1100-1110'
 tm_executor.execute_TM(tape_str)
 
 output_dir = '/home/martin_jutzi/Temp'

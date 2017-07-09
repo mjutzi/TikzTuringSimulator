@@ -2,7 +2,6 @@ import collections
 from enum import Enum
 
 from core.tape_expansion import EXPAND_ALL
-from itertools import chain
 
 TapeAlphabet = collections.namedtuple('TapeAlphabet', 'chars empty_char')
 
@@ -24,7 +23,7 @@ class Tape:
     Beschreibt ein eindimensionales Turingband
     '''
 
-    def __init__(self, entries, alphabet=None, expansion_strategy=EXPAND_ALL):
+    def __init__(self, entries=None, alphabet=None, expansion_strategy=EXPAND_ALL):
         '''
         Erzeugt ein neues eindimensionales Turingband. Werden die Grenzen des Turingbandes erreicht, so entscheidet die expansion_strategy
         als Stretegy pattern, ob und wie das Band erweitert wird.
@@ -33,7 +32,7 @@ class Tape:
         Im Modul core.internals sind EXPAND_ALL, EXPAND_NONE, EXPAND_LEFT_ONLY, EXPAND_RIGHT_ONLY vordefiniert
         '''
         self.__position = 0
-        self.__entries = entries
+        self.__entries = entries if entries else []
         self.__alphabet = alphabet
         self.__expansion_strategy = expansion_strategy
 
@@ -56,13 +55,15 @@ class Tape:
         expansion_op = self.__get_expansion_op_by_direction(direction)
         self.__position = expansion_op(self.__position, self.__entries, self.__get_empty_char())
 
+    def __ensure_non_empty(self):
+        if not self.__entries:
+            self.__entries.append(self.__get_empty_char())
+
     def read(self):
         '''
         Liest den Buchstaben an der aktuellen Bandposition
         '''
-        if not self.__entries:
-            self.__entries.append(self.__get_empty_char())
-
+        self.__ensure_non_empty()
         return self.__entries[self.__position]
 
     def write(self, char):
@@ -88,6 +89,7 @@ class Tape:
 
     @property
     def entries(self):
+        self.__ensure_non_empty()
         return self.__entries
 
     @property

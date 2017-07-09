@@ -14,9 +14,15 @@ class _InputParser:
     def _parse_tape_list(self, string):
         raise NotImplementedError('abstract method')
 
-    def parse_tape(self, string):
+    def parse_tape(self, string, num_of_tapes):
         tapes = self._parse_tape_list(string)
         assert_format(len(tapes) > 0, 'expect tapes to be non empty', string)
+
+        if len(tapes) < num_of_tapes:
+            num_of_missing_tapes = num_of_tapes - len(tapes)
+            tapes.extend([Tape() for _ in range(num_of_missing_tapes)])
+
+        assert_format(len(tapes) == num_of_tapes, 'number of tapes exceeded', string)
         return MultiTape(tapes) if len(tapes) > 1 else tapes[0]
 
 
@@ -77,14 +83,14 @@ class _GernericInputParser(_InputParser):
 _PARSER = [_GernericInputParser(), _SimpleInputParser(), _SingleCharInputParser()]
 
 
-def parse_tape(string):
+def parse_tape(string, num_of_tapes):
     for parser in _PARSER:
         if parser.matches(string):
-            return parser.parse_tape(string)
+            return parser.parse_tape(string, num_of_tapes)
     raise FormatException('undefined format', string)
 
 
-def load_tape(path):
+def load_tape(path, num_of_tapes):
     with open(path, 'r') as file:
         tape_str = ''.join(file.readlines())
-        return parse_tape(tape_str)
+        return parse_tape(tape_str, num_of_tapes)

@@ -4,7 +4,8 @@ class InvalidCharacterException(Exception):
 
 
 class TuringMachine:
-    def __init__(self, initial_state, final_states, transition_graph, alphabet=None):
+    def __init__(self, num_of_tapes, initial_state, final_states, transition_graph, alphabet=None):
+        self.__num_of_tapes = num_of_tapes
         self.initial_state = initial_state
         self.final_states = final_states
         self.transition_graph = transition_graph
@@ -49,3 +50,7 @@ class TuringMachine:
     @property
     def states(self):
         return self.transition_graph.states
+
+    @property
+    def num_of_tapes(self):
+        return self.__num_of_tapes

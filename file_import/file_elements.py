@@ -72,4 +72,4 @@ def compile_turing_machine(header, commands, band_alphabet):
     initial_state = find_state(header.initial_state) if header.initial_state else find_by_index[0]
     final_states = {find_state(descriptor) for descriptor in header.accepted_states}
 
-    return TuringMachine(initial_state, final_states, transition_graph, band_alphabet)
+    return TuringMachine(header.num_of_bands, initial_state, final_states, transition_graph, band_alphabet)
