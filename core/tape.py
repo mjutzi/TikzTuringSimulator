@@ -14,6 +14,9 @@ class Direction(Enum):
     NONE = 0
     RIGHT = 1
 
+    def __str__(self):
+        return ['left', 'none', 'right'][self.value + 1]
+
 
 class Tape:
     '''
@@ -78,7 +81,7 @@ class Tape:
         Gibt alle buchstaben des Bandes zurück, die nicht Teil des alphabets sind.
         '''
         if self.__alphabet:
-            return set(self.__alphabet.chars) - set(self.__entries)
+            return set(self.__entries) - set(self.__alphabet.chars)
         else:
             return set(self.__entries)
 
@@ -93,6 +96,9 @@ class Tape:
     @property
     def inner_tapes(self):
         return [self]
+
+    def __str__(self):
+        return ' '.join(self.__entries)
 
 
 class MultiTape:
@@ -151,3 +157,6 @@ class MultiTape:
     @property
     def inner_tapes(self):
         return self.__tapes
+
+    def __str__(self):
+        return '\n'.join(self.__tapes)

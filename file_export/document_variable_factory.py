@@ -55,17 +55,22 @@ class DocumentVariableFactory:
         self.__tape_item_limit = tape_item_limit
 
         self.__iterations = []
+        self.__remark = ''
 
     def add_iteration(self, transition_target):
-        iter_var = IterationTemplateVariables(
-            index=len(self.__iterations) + 1,
-            states=_create_state_vars(self.__states, transition_target.new_state),
-            tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
 
-        self.__iterations.append(iter_var)
+        if transition_target:
+            iter_var = IterationTemplateVariables(
+                index=len(self.__iterations) + 1,
+                states=_create_state_vars(self.__states, transition_target.new_state),
+                tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
+
+            self.__iterations.append(iter_var)
+        else:
+            self.__remark = 'Input is invalid!'
 
     def empty(self):
         return not self.__iterations
 
-    def document_variables(self, remark=''):
-        return DocumentTemplateVariables(iterations=self.__iterations, remark=remark)
+    def document_variables(self):
+        return DocumentTemplateVariables(iterations=self.__iterations, remark=self.__remark)

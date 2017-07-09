@@ -1,6 +1,7 @@
 import os
+import argparse
 
-from core.tape_parser import parse_tape
+from core.tape_parser import parse_tape, load_tape
 from file_export.document_variable_factory import DocumentVariableFactory
 from file_export.template_engine import TemplateEngine
 from file_import.parser import parse_file
@@ -9,7 +10,7 @@ from utils.os_utils import os_open_command, open_with
 
 
 class ExecuteTM:
-    def __init__(self, turing_machine, observer):
+    def __init__(self, turing_machine, observer=None):
         self.__turing_machine = turing_machine
         self.__observer = observer if observer else []
 
@@ -27,7 +28,7 @@ class ExecuteTM:
 
     def execute_TM(self, input_string):
 
-        tape = parse_tape(input_string)
+        tape = load_tape(input_string) if os.path.isfile(input_string) else parse_tape(input_string)
         self.__turing_machine.assert_charset(tape)
         self.__init_observer(tape)
 
@@ -41,21 +42,21 @@ class ExecuteTM:
 
 
 class VisualizeTM:
-    def __init__(self, output_dir, template_engine, viewer):
-        self.__output_dir = output_dir
+    def __init__(self, template_engine, viewer):
         self.__template_engine = template_engine
         self.__viewer = viewer
 
+        self.__tape_item_limit = 12
         self.__doc_factory = None
         self.__generated_file = None
 
-    def create(self, output_dir, template_path, viewer=os_open_command()):
-        os.makedirs(self.__output_dir, exist_ok=True)
+    @staticmethod
+    def create(template_path, viewer=os_open_command()):
         template_engine = TemplateEngine.load(template_path)
-        return VisualizeTM(output_dir, template_engine, viewer)
+        return VisualizeTM(template_engine, viewer)
 
     def register_state(self, tape, states):
-        self.__doc_factory = DocumentVariableFactory(tape, states)
+        self.__doc_factory = DocumentVariableFactory(tape, states, self.__tape_item_limit)
 
     def register_iteration(self, transition_event, transition_target):
         self.__doc_factory.add_iteration(transition_target)
@@ -63,15 +64,19 @@ class VisualizeTM:
     def set_viewer(self, viewername):
         self.__viewer = viewername
 
-    def write_file(self):
+    def set_tape_item_limit(self, tape_item_limit):
+        self.__tape_item_limit = tape_item_limit
+
+    def write_file(self, output_dir='./target/'):
         if not self.__doc_factory:
             raise RuntimeError('No state registered.')
 
         if self.__doc_factory.empty():
             raise RuntimeError('No iterations registered.')
 
+        os.makedirs(output_dir, exist_ok=True)
         doc_vars = self.__doc_factory.document_variables()
-        self.__generated_file = self.__template_engine.create_document(doc_vars, self.__output_dir)
+        self.__generated_file = self.__template_engine.create_document(doc_vars, output_dir)
 
     def visualize(self):
         if not self.__generated_file:
@@ -80,23 +85,56 @@ class VisualizeTM:
         open_with(self.__generated_file, self.__viewer)
 
 
+class PrintTM:
+    def register_state(self, tape, states):
+        print('setting state of turing machine:\n tape=', tape, '\n states=', states, '\n')
+
+    def _format_event(self, transition_event):
+        return '{} read: {}'.format(transition_event.current_state.name, transition_event.read_chars)
+
+    def _format_target(self, transition_target):
+        return '{} write: {} move: {}'.format(transition_target.new_state.name,
+                                              transition_target.new_chars,
+                                              transition_target.move_directions)
+
+    def register_iteration(self, transition_event, transition_target):
+        if transition_target:
+            event_str = self._format_event(transition_event)
+            target_str = self._format_target(transition_target)
+            print(event_str, ' > ', target_str)
+        else:
+            print('Input string is invalid.')
 
 
-class RunConfiguration:
-    def __init__(self, output_dir):
-        self.args['output_dir']
-
-        self.output_dir = output_dir
-        self.template_path = 'templates/latex'
-        self.viewer = os_open_command()
-
-
-# TODO:
 '''
-TODO
- - compile latex file 1.5 h
- - parse args and run program 2h
- - test n debug 2h
- ----------
- > DONE in 5h
+TODO parse commands
 '''
+parser = argparse.ArgumentParser(description='Visualizes Turing Machines')
+parser.add_argument('--turing_program', help='the path to the turing program')
+parser.add_argument('--tape', help='the path to the tape to run')
+parser.add_argument('--out_dir', help='the path to the tape to run')
+
+parser.add_argument('--interactive', help='the path to the turing program')
+parser.add_argument('--template', help='the path to the turing program')
+parser.add_argument('--tape_item_limit', help='the path to the turing program')
+
+file_to_tm = '/home/martin.jutzi/Temp/Program.tm'
+tm_executor = ExecuteTM._parse_file(file_to_tm)
+
+template_path = '/home/martin.jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
+tape_item_limit = 12
+viewer = ''
+
+visual_executor = VisualizeTM.create(template_path)
+visual_executor.set_tape_item_limit(tape_item_limit)
+# visual_executor.set_viewer(viewer)
+
+tm_executor.add_observer(PrintTM())
+tm_executor.add_observer(visual_executor)
+
+# 0', '0', '1', '1', '1
+tape_str = '1100'
+tm_executor.execute_TM(tape_str)
+
+output_dir = '/home/martin.jutzi/Temp'
+visual_executor.write_file(output_dir)
