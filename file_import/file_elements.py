@@ -34,10 +34,11 @@ def _compile_transition_graph(commands, states, find_state):
         current_state = find_state(command.current_state)
         read_chars = command.read_chars
 
+        dir_list = [directions[d] for d in command.move_directions]
         target = TransitionTarget(
             new_state=find_state(command.new_state),
             new_chars=command.new_chars,
-            move_directions=[directions[d] for d in command.move_directions])
+            move_directions=dir_list if len(dir_list) > 1 else dir_list[0])
 
         transition_graph.register_transition(current_state, read_chars, target)
 

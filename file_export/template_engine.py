@@ -54,7 +54,8 @@ class TemplateEngine:
     def _run_compile_cmd(self, out_dir):
         compile_cmd = self.__settings['compile_cmd']
         if compile_cmd:
-            runcmd(compile_cmd, cwd=out_dir, timeout=60)
+            timeout_10_min = 10 * 60
+            runcmd(compile_cmd, cwd=out_dir, timeout=timeout_10_min)
 
     def create_document(self, variables, out_dir):
         doc_file = os.path.join(out_dir, self.__settings['doc_name'])

@@ -118,7 +118,7 @@ parser.add_argument('--template', help='the path to the turing program')
 parser.add_argument('--tape_item_limit', help='the path to the turing program')
 parser.add_argument('--verbose', help='the path to the turing program')
 
-file_to_tm = '/home/martin_jutzi/Temp/teilfolge.txt'
+file_to_tm = '/home/martin_jutzi/Temp/collatz.txt'
 tm_executor = ExecuteTM._parse_file(file_to_tm)
 
 template_path = '/home/martin_jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
@@ -133,7 +133,7 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1,1,0,1,-,0,0,1,1,1,1,0,1;B'
+tape_str = '1,0,0,1,1,1,1,0,1,0,1,1'
 tm_executor.execute_TM(tape_str)
 
 output_dir = '/home/martin_jutzi/Temp'

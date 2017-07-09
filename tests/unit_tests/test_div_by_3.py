@@ -22,7 +22,8 @@ class TestSolutions(TestCase):
             'q4, 0 > q2, 1, L'
         ]
 
-        self.turing_machine, self.band_alphabet = parse_lines(lines)
+        self.turing_machine = parse_lines(lines)
+        self.band_alphabet = self.turing_machine.alphabet
 
     def test_tm_terminates_immediatly_if_type_ist_empty(self):
         empty_tape = Tape([], alphabet=self.band_alphabet)
