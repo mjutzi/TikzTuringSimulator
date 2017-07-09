@@ -80,7 +80,7 @@ def parse_lines(all_lines, parse_format='default'):
     band_alphabet = TapeAlphabet(chars=set(header.chars_in), empty_char=header.empty_char)
     turing_machine = compile_turing_machine(header, commands, band_alphabet)
 
-    return turing_machine, band_alphabet
+    return turing_machine
 
 
 def parse_file(path):

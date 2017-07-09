@@ -1,3 +1,4 @@
+import os
 import re
 
 from core.tape import Tape, MultiTape
@@ -40,10 +41,11 @@ class _SimpleInputParser(_InputParser):
     '''
 
     def __init__(self):
-        super().__init__('((([^,;]+),)*[^,;]+;?)+')
+        super().__init__('(([^,;]+,)+[^,;];?)+')
 
     def _parse_single_tape(self, string):
-        return Tape(string.split(','))
+        entries = [e.strip() for e in string.split(',')]
+        return Tape(entries)
 
     def _parse_tape_list(self, string):
         return [self._parse_single_tape(entries) for entries in string.split(';')]
@@ -81,3 +83,9 @@ def parse_tape(string):
         if parser.matches(string):
             return parser.parse_tape(string)
     raise FormatException('undefined format', string)
+
+
+def load_tape(path):
+    with open(path, 'r') as file:
+        tape_str = ''.join(file.readlines())
+        return parse_tape(tape_str)

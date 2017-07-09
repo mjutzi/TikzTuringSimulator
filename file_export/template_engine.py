@@ -1,8 +1,13 @@
+import os
+
 from file_export.formatting import TemplateItemFormatter
+from utils.os_utils import runcmd
+from utils.settings_utils import load_settings
 
 
 class TemplateEngine:
-    def __init__(self, formats, delimiter):
+    def __init__(self, settings, formats, delimiter):
+        self.__settings = settings
         self.__formats = formats
         self.delimiter = delimiter
 
@@ -10,7 +15,12 @@ class TemplateEngine:
     def load(path, delimter='\n'):
         template_item_names = ['tape_item', 'tape', 'state', 'states', 'iteration', 'document']
         template_items = {item_name: TemplateItemFormatter(path, item_name) for item_name in template_item_names}
-        return TemplateEngine(template_items, delimter)
+
+        default_settings = {'doc_name': 'document', 'gen_name': 'document', 'compile_cmd': None}
+        settings_file = os.path.join(path, 'settings')
+        settings_dict = load_settings(settings_file, default_settings)
+
+        return TemplateEngine(settings_dict, template_items, delimter)
 
     def __getitem__(self, key):
         return self.__formats[key]
@@ -41,9 +51,18 @@ class TemplateEngine:
         return self['document'].format(remark=variables.remark,
                                        iterations=self.__format_each(variables.iterations, self.__compile_iteration))
 
-    def create_document(self, variables, output_file):
-        with open(output_file, 'w') as file:
+    def _run_compile_cmd(self, out_dir):
+        compile_cmd = self.__settings['compile_cmd']
+        if compile_cmd:
+            runcmd(compile_cmd, cwd=out_dir, timeout=60)
+
+    def create_document(self, variables, out_dir):
+        doc_file = os.path.join(out_dir, self.__settings['doc_name'])
+        gen_file = os.path.join(out_dir, self.__settings['gen_name'])
+
+        with open(doc_file, 'w') as file:
             file.write(self.compile_document(variables))
 
-    def execute_postconstruct_script(self, output_file):
-        pass  # todo
+        self._run_compile_cmd(out_dir)
+
+        return gen_file

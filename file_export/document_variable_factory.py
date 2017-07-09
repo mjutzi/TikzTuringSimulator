@@ -36,7 +36,7 @@ def _create_single_tape_vars(d1_tape, tape_index, limit):
     return _create_tape_vars(entries, d1_tape.position, tape_index, offset)
 
 
-def _create_tapes_vars(tape, limit_items_to):
+def create_tape_vars(tape, limit_items_to):
     return [_create_single_tape_vars(d1_tape, tape_index, limit_items_to)
             for tape_index, d1_tape in enumerate(tape.inner_tapes)]
 
@@ -55,14 +55,22 @@ class DocumentVariableFactory:
         self.__tape_item_limit = tape_item_limit
 
         self.__iterations = []
+        self.__remark = ''
 
     def add_iteration(self, transition_target):
-        iter_var = IterationTemplateVariables(
-            index=len(self.__iterations) + 1,
-            states=_create_state_vars(self.__states, transition_target.new_state),
-            tapes=_create_tapes_vars(self.__tape, self.__tape_item_limit))
 
-        self.__iterations.append(iter_var)
+        if transition_target:
+            iter_var = IterationTemplateVariables(
+                index=len(self.__iterations) + 1,
+                states=_create_state_vars(self.__states, transition_target.new_state),
+                tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
 
-    def document_variables(self, remark=''):
-        return DocumentTemplateVariables(iterations=self.__iterations, remark=remark)
+            self.__iterations.append(iter_var)
+        else:
+            self.__remark = 'Input is invalid!'
+
+    def empty(self):
+        return not self.__iterations
+
+    def document_variables(self):
+        return DocumentTemplateVariables(iterations=self.__iterations, remark=self.__remark)
