@@ -133,8 +133,8 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1,1,0,1,-,0,0,1,1; '
+tape_str = '1,1,0,1,-,0,0,1,1,1,1,0,1;B'
 tm_executor.execute_TM(tape_str)
 
-output_dir = '/home/martin.jutzi/Temp'
+output_dir = '/home/martin_jutzi/Temp'
 visual_executor.write_file(output_dir)

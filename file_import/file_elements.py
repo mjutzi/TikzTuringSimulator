@@ -23,11 +23,11 @@ def _compile_states(commands):
     find_by_name = {state.name: state for state in states}
     find_by_index = states
 
-    return find_by_name, find_by_index
+    return states, find_by_name, find_by_index
 
 
-def _compile_transition_graph(commands, find_state):
-    transition_graph = TransitionGraph()
+def _compile_transition_graph(commands, states, find_state):
+    transition_graph = TransitionGraph(states)
     directions = {'L': Direction.LEFT, 'R': Direction.RIGHT, 'N': Direction.NONE}
 
     for command in commands:
@@ -45,7 +45,7 @@ def _compile_transition_graph(commands, find_state):
 
 
 def compile_turing_machine(header, commands, band_alphabet):
-    find_by_name, find_by_index = _compile_states(commands)
+    states, find_by_name, find_by_index = _compile_states(commands)
 
     def find_state(name_or_index):
         if name_or_index in find_by_name:
@@ -58,7 +58,7 @@ def compile_turing_machine(header, commands, band_alphabet):
         except (ValueError, IndexError):
             raise FormatException('state is unknown', name_or_index)
 
-    transition_graph = _compile_transition_graph(commands, find_state)
+    transition_graph = _compile_transition_graph(commands, states, find_state)
 
     initial_state = find_state(header.initial_state) if header.initial_state else find_by_index[0]
     final_states = {find_state(descriptor) for descriptor in header.accepted_states}

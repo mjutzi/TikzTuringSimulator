@@ -20,7 +20,8 @@ class TransitionGraph:
     Repräsentiert Menge der zulässigen Zustandsänderungen einer Turingmaschine.
     '''
 
-    def __init__(self, transitions_map=None):
+    def __init__(self, states, transitions_map=None):
+        self.__states = states
         self.__transitions_map = transitions_map if transitions_map is not None else {}
 
     def register_transition(self, current_state, read_chars, transition_target):
@@ -47,4 +48,4 @@ class TransitionGraph:
 
     @property
     def states(self):
-        return {event.current_state for event in self.__transitions_map}
+        return self.__states
