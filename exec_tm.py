@@ -9,6 +9,9 @@ from utils.os_utils import os_open_command, open_with
 
 
 class ExecuteTM:
+    '''
+    Hilfklasse zum ausführen von Turing maschinen.
+    '''
     def __init__(self, turing_machine, observer=None):
         self.__turing_machine = turing_machine
         self.__observer = observer if observer else []
