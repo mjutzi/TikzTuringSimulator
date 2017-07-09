@@ -2,6 +2,7 @@ import collections
 from enum import Enum
 
 from core.tape_expansion import EXPAND_ALL
+from itertools import chain
 
 TapeAlphabet = collections.namedtuple('TapeAlphabet', 'chars empty_char')
 
@@ -98,7 +99,7 @@ class Tape:
         return [self]
 
     def __str__(self):
-        return ' '.join(self.__entries)
+        return ','.join(self.__entries)
 
 
 class MultiTape:
@@ -144,7 +145,8 @@ class MultiTape:
         '''
         Gibt alle buchstaben des Bandes zurück, die nicht Teil des alphabets sind.
         '''
-        return set().union(tape.non_alphabet_chars() for tape in self.__tapes)
+        all_non_alpha_chars = list(tape.non_alphabet_chars() for tape in self.__tapes)
+        return set().union(*all_non_alpha_chars)
 
     @property
     def entries(self):
@@ -159,4 +161,4 @@ class MultiTape:
         return self.__tapes
 
     def __str__(self):
-        return '\n'.join(self.__tapes)
+        return '; '.join(str(tape) for tape in self.__tapes)

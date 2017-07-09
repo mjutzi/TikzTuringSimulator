@@ -117,6 +117,7 @@ parser.add_argument('--out_dir', help='the path to the tape to run')
 parser.add_argument('--interactive', help='the path to the turing program')
 parser.add_argument('--template', help='the path to the turing program')
 parser.add_argument('--tape_item_limit', help='the path to the turing program')
+parser.add_argument('--verbose', help='the path to the turing program')
 
 file_to_tm = '/home/martin.jutzi/Temp/Program.tm'
 tm_executor = ExecuteTM._parse_file(file_to_tm)
@@ -133,7 +134,7 @@ tm_executor.add_observer(PrintTM())
 tm_executor.add_observer(visual_executor)
 
 # 0', '0', '1', '1', '1
-tape_str = '1100'
+tape_str = '1,1,0,0'
 tm_executor.execute_TM(tape_str)
 
 output_dir = '/home/martin.jutzi/Temp'
