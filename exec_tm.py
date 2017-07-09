@@ -21,7 +21,7 @@ class ExecuteTM:
         for observer in self.__observer:
             observer.register_state(tape, states)
 
-    def __notify_observer(self, transition_event, transition_target):
+    def __notify_observer(self, transition_event=None, transition_target=None):
         for observer in self.__observer:
             observer.register_iteration(transition_event, transition_target)
 
@@ -56,10 +56,11 @@ class VisualizeTM:
 
     def register_state(self, tape, states):
         self.__doc_factory = DocumentVariableFactory(tape, states, self.__tape_item_limit)
+        self.__doc_factory.add_iteration(None, None)
 
     def register_iteration(self, transition_event, transition_target):
         if transition_target:
-            self.__doc_factory.add_iteration(transition_target)
+            self.__doc_factory.add_iteration(transition_event, transition_target)
             self.__doc_factory.set_remark('Input is valid.')
         else:
             self.__doc_factory.set_remark('Input is invalid.')
@@ -101,7 +102,7 @@ class PrintTM:
                                               transition_target.move_directions)
 
     def register_iteration(self, transition_event, transition_target):
-        if transition_target:
+        if transition_event and transition_target:
             event_str = self._format_event(transition_event)
             target_str = self._format_target(transition_target)
             print(event_str, ' > ', target_str)

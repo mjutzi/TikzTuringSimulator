@@ -43,7 +43,7 @@ def create_tape_vars(tape, limit_items_to):
 
 def _create_state_vars(states, current_state):
     def state_type(state):
-        return 'selected_state' if state.index == current_state.index else 'regular_state'
+        return 'selected_state' if state == current_state  else 'regular_state'
 
     return [StateTemplateVariables(name=state.name, type=state_type(state)) for state in states]
 
@@ -57,10 +57,11 @@ class DocumentVariableFactory:
         self.__iterations = []
         self.__remark = ''
 
-    def add_iteration(self, transition_target):
+    def add_iteration(self, transition_event, transition_target):
+        selected_state = transition_target.new_state if transition_target else None
         iter_var = IterationTemplateVariables(
-            index=len(self.__iterations) + 1,
-            states=_create_state_vars(self.__states, transition_target.new_state),
+            index=len(self.__iterations),
+            states=_create_state_vars(self.__states, selected_state),
             tapes=create_tape_vars(self.__tape, self.__tape_item_limit))
 
         self.__iterations.append(iter_var)

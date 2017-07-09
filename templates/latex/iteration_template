@@ -1,6 +1,6 @@
 \begin{frame}
 % <iteration.iteration_count>
-\frametitle{Iteration <iteration.iteration_count>}
+\frametitle{Iteration <iteration.index>}
 \begin{tikzpicture}
 <iteration.states>
 <iteration.tapes>
