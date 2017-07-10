@@ -33,7 +33,7 @@ class _SingleCharInputParser(_InputParser):
     '''
 
     def __init__(self):
-        super().__init__('([^,;:{}\s]+ )*[^,:;{}\s]+')
+        super().__init__('([^,;:{}\s]+ )*[^,:;{}\s]*')
 
     def _parse_tape_list(self, string):
         return [Tape(list(chars)) for chars in string.split(' ')]
