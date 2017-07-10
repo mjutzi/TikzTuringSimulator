@@ -31,9 +31,12 @@ class _SingleCharInputParser(_InputParser):
     Eignet sich für Input der nur aus einzelnen Charactern besteht
     Input Strings sind von der Form: char1char2 char1char2
     '''
+    _VALID_CHAR_PTRN = '[^,;:{}\s]'
+
+    _INPUT_PTRN = '({}+ )*{}*'.format(_VALID_CHAR_PTRN, _VALID_CHAR_PTRN)
 
     def __init__(self):
-        super().__init__('([^,;:{}\s]+ )*[^,:;{}\s]*')
+        super().__init__(_SingleCharInputParser._INPUT_PTRN)
 
     def _parse_tape_list(self, string):
         return [Tape(list(chars)) for chars in string.split(' ')]
@@ -45,8 +48,12 @@ class _SimpleInputParser(_InputParser):
     Input Strings sind von der Form: item1,item2;item1,item2
     '''
 
+    _VALID_CHAR_PTRN = '[^,;]'
+
+    _INPUT_PTRN = '(({}+,)+{};?)+'.format(_VALID_CHAR_PTRN, _VALID_CHAR_PTRN)
+
     def __init__(self):
-        super().__init__('(([^,;]+,)+[^,;];?)+')
+        super().__init__(_SimpleInputParser._INPUT_PTRN)
 
     def _parse_single_tape(self, string):
         entries = [e.strip() for e in string.split(',')]
@@ -62,8 +69,12 @@ class _GernericInputParser(_InputParser):
     Input Strings sind von der Form: tape:{'item1','item2'}: tape:{'item1','item2'}:
     '''
 
+    _TAPE_PTRN = 'tape:{.*}:'
+
+    _INPUT_PTRN = '(({})\s+)*({})'.format(_TAPE_PTRN, _TAPE_PTRN)
+
     def __init__(self):
-        super().__init__('((tape:{.*}:)\s+)*(tape:{.*}:)')
+        super().__init__(_GernericInputParser._INPUT_PTRN)
         self.__tape_open_ptrn = re.compile('tape:{')
         self.__tape_close_ptrn = re.compile('}:')
         self.__item_ptrn = re.compile('\'(?P<item>[^\']+),?\'')
