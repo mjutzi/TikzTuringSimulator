@@ -42,6 +42,6 @@ class ExecuteTM:
             self.__notify_observer(transition_event, transition_target)
 
     @staticmethod
-    def _parse_file(filename):
+    def parse_file(filename):
         turing_machine = parse_file(filename)
         return ExecuteTM(turing_machine)

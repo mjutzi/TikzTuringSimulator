@@ -1,6 +1,23 @@
+import os
+
 from file_export.document_variable_factory import DocumentVariableFactory
 from file_export.template_engine import TemplateEngine
-from utils.os_utils import os_open_command, open_with
+from utils.os_utils import open_with, try_open
+
+
+def _resolve_template_path(path_or_name):
+    template = path_or_name if path_or_name else 'latex'
+    if os.path.exists(template):
+        return template
+    else:
+        controler_dir = os.path.dirname(os.path.realpath(__file__))
+        template_dir = os.path.join(controler_dir, '../templates')
+        return os.path.join(template_dir, template)
+
+
+def is_template(path_or_name):
+    path = _resolve_template_path(path_or_name)
+    return os.path.isdir(path)
 
 
 class VisualizeTM:
@@ -13,7 +30,8 @@ class VisualizeTM:
         self.__generated_file = None
 
     @staticmethod
-    def create(template_path, viewer=os_open_command()):
+    def create(template, viewer=None):
+        template_path = _resolve_template_path(template)
         template_engine = TemplateEngine.load(template_path)
         return VisualizeTM(template_engine, viewer)
 
@@ -45,11 +63,16 @@ class VisualizeTM:
         doc_vars = self.__doc_factory.document_variables()
         self.__generated_file = self.__template_engine.create_document(doc_vars, output_dir)
 
+        return self.__generated_file
+
     def visualize(self):
         if not self.__generated_file:
             self.write_file()
 
-        open_with(self.__generated_file, self.__viewer)
+        if self.__viewer:
+            open_with(self.__generated_file, self.__viewer)
+        else:
+            try_open(self.__generated_file)
 
 
 class PrintTM:
