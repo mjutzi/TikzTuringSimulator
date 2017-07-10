@@ -1,54 +1,6 @@
-import argparse
-import os
-
-from core.tape_parser import parse_tape, load_tape
 from file_export.document_variable_factory import DocumentVariableFactory
 from file_export.template_engine import TemplateEngine
-from file_import.parser import parse_file
 from utils.os_utils import os_open_command, open_with
-
-
-class ExecuteTM:
-    '''
-    Hilfklasse zum ausführen von Turing maschinen.
-    '''
-
-    def __init__(self, turing_machine, observer=None):
-        self.__turing_machine = turing_machine
-        self.__observer = observer if observer else []
-
-    def add_observer(self, observer):
-        self.__observer.append(observer)
-
-    def __init_observer(self, tape):
-        states = self.__turing_machine.states
-        for observer in self.__observer:
-            observer.register_state(tape, states)
-
-    def __notify_observer(self, transition_event=None, transition_target=None):
-        for observer in self.__observer:
-            observer.register_iteration(transition_event, transition_target)
-
-    def _get_tape(self, input_string, num_of_tapes):
-        if os.path.isfile(input_string):
-            return load_tape(input_string, num_of_tapes)
-        else:
-            return parse_tape(input_string, num_of_tapes)
-
-    def execute_TM(self, input_string):
-
-        num_of_tapes = self.__turing_machine.num_of_tapes
-        tape = self._get_tape(input_string, num_of_tapes)
-        self.__turing_machine.assert_charset(tape)
-        self.__init_observer(tape)
-
-        for transition_event, transition_target in self.__turing_machine.as_iterator(tape):
-            self.__notify_observer(transition_event, transition_target)
-
-    @staticmethod
-    def _parse_file(filename):
-        turing_machine = parse_file(filename)
-        return ExecuteTM(turing_machine)
 
 
 class VisualizeTM:
@@ -119,38 +71,3 @@ class PrintTM:
             print(event_str, ' > ', target_str)
         else:
             print('Input string is invalid.')
-
-
-'''
-TODO debug commands
-'''
-parser = argparse.ArgumentParser(description='Visualizes Turing Machines')
-parser.add_argument('--turing_program', help='the path to the turing program')
-parser.add_argument('--tape', help='the path to the tape to run')
-parser.add_argument('--out_dir', help='the path to the tape to run')
-
-parser.add_argument('--interactive', help='the path to the turing program')
-parser.add_argument('--template', help='the path to the turing program')
-parser.add_argument('--tape_item_limit', help='the path to the turing program')
-parser.add_argument('--verbose', help='the path to the turing program')
-
-file_to_tm = '/home/martin_jutzi/Temp/divisiontest7.txt'
-tm_executor = ExecuteTM._parse_file(file_to_tm)
-
-template_path = '/home/martin_jutzi/PycharmProjects/TikzTuringSimulator/templates/latex'
-tape_item_limit = 12
-viewer = ''
-
-visual_executor = VisualizeTM.create(template_path)
-visual_executor.set_tape_item_limit(tape_item_limit)
-# visual_executor.set_viewer(viewer)
-
-tm_executor.add_observer(PrintTM())
-tm_executor.add_observer(visual_executor)
-
-# 0', '0', '1', '1', '1
-tape_str = '00111'
-tm_executor.execute_TM(tape_str)
-
-output_dir = '/home/martin_jutzi/Temp'
-visual_executor.write_file(output_dir)
