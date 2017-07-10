@@ -24,10 +24,9 @@ def start_interactive_mode():
     def read_input():
         return input("Enter the tape characters (or 'quit()' to exit): ")
 
-    print("Usage:")
-    print("Type the characters of each tape. Missing tapes are assumed to be empty. You may either type 'tape1 tape2' "
-          "for single character tapes or use the multi character input formats 't,a,p,e,1;t,a,p,e,2' or "
-          "'tape:{'i','i'}: tape:{'i','i'}'")
+    print("Usage: Type the characters of each tape. Missing tapes are assumed to be empty. You may either type "
+          "'tape1 tape2' for single character tapes or use the multi character input formats 't,a,p,e,1;t,a,p,e,2' or "
+          "'tape:{'i','i'}: tape:{'i','i'}'.\n")
 
     tape = read_input()
     while tape != 'quit()':

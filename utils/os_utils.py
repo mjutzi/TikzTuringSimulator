@@ -6,7 +6,7 @@ from sys import platform
 
 def os_open_command():
     os_open_cmds = {'linux': 'xdg-open', 'win': 'start', 'darwin': 'open'}
-    os_name = filter(lambda c: not c.isdigit(), platform)
+    os_name = ''.join(ch for ch in platform if not ch.isdigit())
     return os_open_cmds[os_name] if os_name in os_open_cmds else 'open'
 
 
@@ -21,11 +21,8 @@ def try_open(path):
     '''
     Versucht die Datei mit dem OS zugehörigen Standartprogram zu öffnen.
     '''
-    if not os.path.isfile(path):
-        raise FileNotFoundError('File \'{}\' does not exist.'.format(path))
-
     try:
-        os.subprocess.check_output([os_open_command(), path])
+        open_with(path, os_open_command())
         return True
     except:
         _open_fallback(path)
@@ -39,12 +36,13 @@ def open_with(path, app):
     if not os.path.isfile(path):
         raise FileNotFoundError('File \'{}\' does not exist.'.format(path))
 
-    os.subprocess.check_output([app, path])
+    runcmd('{} {}'.format(app, path))
 
 
-def runcmd(command, cwd, timeout=None):
+def runcmd(command, cwd=None, timeout=None):
     args = command.split()
-    with Popen(args, cwd=cwd) as process:
+    FNULL = open(os.devnull, 'w')
+    with Popen(args, stdout=FNULL, stderr=FNULL, cwd=cwd) as process:
         try:
             output, unused_err = process.communicate(timeout=timeout)
         except TimeoutExpired:
